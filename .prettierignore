@@ -1,0 +1,7 @@
+build
+content/blog
+coverage
+node_modules
+package-lock.json
+playwright-report
+test-results

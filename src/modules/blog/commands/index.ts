@@ -1,0 +1,1 @@
+export { blogCommand } from './blogCommand';
