@@ -10,7 +10,7 @@ export function Banner(): ReactElement {
     <Box
       component="img"
       src={`${appConfig.basePath}banner.svg`}
-      alt="BogdanLabs.dev — Bogdan Shchavinskyi, Tech Lead and Senior Software Engineer"
+      alt="BogdanLabs.dev — Bogdan Shchavinskyi, Tech Lead / Senior Software Engineer — Backend Infrastructure, DevOps and Platform Engineering"
       sx={bannerStyles.image}
     />
   );

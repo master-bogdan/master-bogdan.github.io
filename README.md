@@ -41,7 +41,9 @@ For the standard repository URL, use `npm run validate`. The browser tests use t
 
 ### Public CV
 
-The outdated CV PDF was deliberately excluded from this repository. The `resume` command currently links to the existing LinkedIn profile. Once a reviewed, updated public CV is available, add it under `public/`, restore the download link using `appConfig.basePath`, and update the command description and tests. Files in `public/` are copied into the published site.
+The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command downloads it with that filename and also links to LinkedIn. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
+
+When replacing the CV, keep the public filename stable and update `whoami`, banner text, and SEO/profile metadata in `index.html` to match. Run `npm run assets:generate` after banner changes so the social preview stays current, then run `npm run validate`.
 
 ## Favicon, Sharing, and Search
 

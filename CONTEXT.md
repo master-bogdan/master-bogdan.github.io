@@ -24,7 +24,7 @@
 - A Command is either visible or hidden.
 - The `blog` command lists or opens Blog Posts.
 - The Static Build validates every Blog Post before emitting assets.
-- The Base Path is applied to banner and local Markdown image URLs.
+- The Base Path is applied to banner, CV download, and local Markdown image URLs.
 
 ## Invariants
 

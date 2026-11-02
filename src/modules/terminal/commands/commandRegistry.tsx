@@ -40,7 +40,7 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
   },
   resume: {
     name: 'resume',
-    description: 'View my professional profile',
+    description: 'Download my resume',
     execute: resumeCommand,
   },
   clear: {
