@@ -29,7 +29,7 @@ The deployment URL is `https://master-bogdan.github.io/personal-website/` once P
 2. In **Settings → Pages → Build and deployment**, select **GitHub Actions** as the source.
 3. Run **Validate and deploy website** from the Actions tab, or rerun the first workflow if it ran before Pages was enabled.
 
-The workflow installs the Node version in `.nvmrc` and npm `11.17.0`, then runs formatting, lint, TypeScript, coverage, the production build, and Chromium tests. Pull requests run validation only. Successful pushes to `main` publish `build/` using GitHub's Pages actions and the built-in `GITHUB_TOKEN`; no personal access token is needed.
+The workflow installs the Node version in `.nvmrc` and npm `11.17.0`, then runs formatting, lint, TypeScript, coverage, the production build, and Chromium tests. Browser tests cover the terminal, CV downloads, SEO metadata, and the no-JavaScript profile at both `/` and the configured deployment path. The final validation rebuilds the configured deployment path before uploading the site. Pull requests run validation only. Successful pushes to `main` publish `build/` using GitHub's Pages actions and the built-in `GITHUB_TOKEN`; no personal access token is needed.
 
 The workflow sets `VITE_BASE_PATH=/personal-website/`. For a custom domain, configure the domain in Pages settings and set the repository Actions variable `VITE_BASE_PATH` to `/`, then redeploy. The same override works locally:
 

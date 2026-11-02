@@ -34,7 +34,11 @@ jobs:
         run: npm ci
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-      - name: Validate site
+      - name: Test root-path deployment
+        run: npm run test:e2e
+        env:
+          VITE_BASE_PATH: /
+      - name: Validate site at deployment path
         run: npm run validate
       - name: Upload site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
