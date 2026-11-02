@@ -31,6 +31,7 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
   blog: {
     name: 'blog',
     description: 'Read blog posts',
+    animateOutput: false,
     execute: (args, context) => blogCommand(args, (slug) => context.executeCommand(`blog ${slug}`)),
   },
   contacts: {

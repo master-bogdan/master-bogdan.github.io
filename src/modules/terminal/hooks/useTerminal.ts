@@ -28,27 +28,23 @@ export const useTerminal = (): TerminalController => {
 
     if (commandName === ClearCommandName) {
       clearOutput();
-      showOutput(
-        HelpCommandName,
-        commandRegistry[HelpCommandName].execute([], commandContext),
-        TerminalTimings.CLEAR_HELP_DELAY_MS,
-      );
+      showOutput(HelpCommandName, commandRegistry[HelpCommandName].execute([], commandContext), {
+        delayMs: TerminalTimings.CLEAR_HELP_DELAY_MS,
+      });
       return;
     }
 
     const command = commandRegistry[commandName];
     const output = command ? command.execute(args, commandContext) : unknownCommand(commandName);
 
-    showOutput(input, output);
+    showOutput(input, output, { animate: command?.animateOutput ?? true });
   };
 
   const completeBoot = (): void => {
     setIsBooting(false);
-    showOutput(
-      HelpCommandName,
-      commandRegistry[HelpCommandName].execute([], { executeCommand }),
-      TerminalTimings.HELP_DELAY_MS,
-    );
+    showOutput(HelpCommandName, commandRegistry[HelpCommandName].execute([], { executeCommand }), {
+      delayMs: TerminalTimings.HELP_DELAY_MS,
+    });
   };
 
   return {

@@ -2,7 +2,8 @@ import { ThemeColors } from '@/shared';
 
 export const terminalStyles = {
   viewport: {
-    minHeight: '100vh',
+    height: '100dvh',
+    boxSizing: 'border-box',
     backgroundColor: ThemeColors.BACKGROUND,
     display: 'flex',
     alignItems: 'center',
@@ -10,6 +11,11 @@ export const terminalStyles = {
     padding: { xs: 1, sm: 2 },
   },
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: 0,
+    overflow: 'hidden',
     maxWidth: { xs: '100%', sm: '90ch', md: '120ch' },
     backgroundColor: ThemeColors.BACKGROUND,
     padding: { xs: 1.5, sm: 2, md: 3 },
@@ -17,12 +23,16 @@ export const terminalStyles = {
     borderRadius: '4px',
     boxShadow: '0 0 20px rgba(0, 255, 0, 0.1)',
   },
+  header: {
+    flexShrink: 0,
+  },
   output: {
-    minHeight: { xs: '50vh', sm: '60vh' },
-    maxHeight: { xs: '70vh', sm: '80vh' },
+    flex: 1,
+    minHeight: 0,
+    overscrollBehavior: 'contain',
+    scrollbarGutter: 'stable',
     overflowY: 'auto',
     overflowX: 'auto',
-    mb: 2,
     '&::-webkit-scrollbar': {
       width: '8px',
       height: '8px',
@@ -35,10 +45,12 @@ export const terminalStyles = {
       borderRadius: '4px',
     },
   },
-  currentOutput: {
+  footer: {
+    flexShrink: 0,
     mt: 2,
   },
   commandLabel: {
+    flexShrink: 0,
     fontFamily: 'var(--font-mono)',
     fontSize: { xs: '12px', sm: '14px' },
     color: ThemeColors.MUTED,

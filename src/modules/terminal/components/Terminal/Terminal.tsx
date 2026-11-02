@@ -14,35 +14,39 @@ export function Terminal(): ReactElement {
   const { completeBoot, currentOutput, executeCommand, isBooting, outputRef, visibleCommands } =
     useTerminal();
 
-  const scrollToOutputEnd = (): void => {
-    const output = outputRef.current;
-
-    if (output) {
-      output.scrollTop = output.scrollHeight;
-    }
-  };
-
   return (
     <Box sx={terminalStyles.viewport}>
       <Container maxWidth={false} sx={terminalStyles.container}>
-        <Box ref={outputRef} sx={terminalStyles.output}>
+        {!isBooting ? (
+          <Box sx={terminalStyles.header}>
+            <Banner />
+            <QuickCommands commands={visibleCommands} onCommand={executeCommand} />
+          </Box>
+        ) : null}
+        {currentOutput ? (
+          <Box sx={terminalStyles.commandLabel}>$ {currentOutput.command}</Box>
+        ) : null}
+        <Box
+          ref={outputRef}
+          role="region"
+          aria-label="Command output"
+          tabIndex={0}
+          sx={terminalStyles.output}
+        >
           {isBooting ? <BootSequence onComplete={completeBoot} /> : null}
-          {!isBooting ? (
-            <>
-              <Banner />
-              <QuickCommands commands={visibleCommands} onCommand={executeCommand} />
-            </>
-          ) : null}
           {currentOutput ? (
-            <Box sx={terminalStyles.currentOutput}>
-              <Box sx={terminalStyles.commandLabel}>$ {currentOutput.command}</Box>
-              <TypewriterOutput key={currentOutput.id} onComplete={scrollToOutputEnd}>
-                {currentOutput.output}
-              </TypewriterOutput>
-            </Box>
+            currentOutput.animate ? (
+              <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
+            ) : (
+              currentOutput.output
+            )
           ) : null}
         </Box>
-        {!isBooting ? <CommandInput onCommand={executeCommand} /> : null}
+        {!isBooting ? (
+          <Box sx={terminalStyles.footer}>
+            <CommandInput onCommand={executeCommand} />
+          </Box>
+        ) : null}
       </Container>
     </Box>
   );

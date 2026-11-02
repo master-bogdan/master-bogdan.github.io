@@ -11,10 +11,12 @@ export type Command = {
   readonly description: string;
   readonly execute: CommandHandler;
   readonly hidden?: boolean;
+  readonly animateOutput?: boolean;
 };
 
 export type CommandOutput = {
   readonly id: number;
   readonly command: string;
   readonly output: ReactNode;
+  readonly animate: boolean;
 };

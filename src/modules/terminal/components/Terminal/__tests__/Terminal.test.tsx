@@ -106,6 +106,21 @@ describe('Terminal', () => {
     expect(screen.getByText(/Post 'missing' not found/)).toBeInTheDocument();
   });
 
+  it('renders a complete long blog post without advancing typing timers', async () => {
+    const input = await bootTerminal();
+    fireEvent.change(input, { target: { value: 'BLOG ai-slop-era' } });
+    const form = input.closest('form');
+
+    if (!form) {
+      throw new Error('Terminal command input must belong to a form');
+    }
+
+    fireEvent.submit(form);
+
+    expect(screen.getByText(/Keep the garbage out of your project/)).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);
+  });
+
   it('runs every hidden command and clears back to help', async () => {
     const input = await bootTerminal();
     const hiddenCommands = [

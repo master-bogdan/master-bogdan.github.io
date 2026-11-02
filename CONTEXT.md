@@ -30,5 +30,7 @@
 
 - Command input is keyboard-first and remains focused after execution.
 - Boot and typewriter sequences clean up their timers.
+- Only command output scrolls; the banner, quick commands, command label, and input stay fixed.
+- New output starts at the top. Blog lists and posts render immediately without typewriter animation.
 - Blog metadata errors and duplicate slugs stop the build.
 - Content is local; the production site needs no application server.
