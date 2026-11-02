@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="BogdanLabs.dev — Bogdan Shchavinskyi, Tech Lead and Senior Software Engineer">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="BogdanLabs.dev — Bogdan Shchavinskyi, Tech Lead / Senior Software Engineer — Backend Infrastructure, DevOps and Platform Engineering">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#070A0F"/>
@@ -76,7 +76,7 @@
     <text x="64" y="200"
       font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace"
       font-size="15" fill="#18C7FF" fill-opacity="0.85">
-      Backend Systems &amp; Cloud Infrastructure
+      Backend Infrastructure · DevOps · Platform Engineering
     </text>
     <text x="64" y="224"
       font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace"

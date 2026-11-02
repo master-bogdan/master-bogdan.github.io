@@ -59,12 +59,18 @@ describe('Terminal', () => {
     const input = await bootTerminal();
 
     fireEvent.click(screen.getByRole('button', { name: 'whoami' }));
-    await act(() => vi.advanceTimersByTimeAsync(20_000));
+    await act(() => vi.advanceTimersByTimeAsync(40_000));
     expect(screen.getByText('Bogdan Shchavinskyi')).toBeInTheDocument();
-    expect(screen.getByText(/7\+ years building and evolving/)).toBeInTheDocument();
+    expect(screen.getByText(/8\+ years building backend systems/)).toBeInTheDocument();
     expect(screen.getByText('~$200K/year')).toBeInTheDocument();
-    expect(screen.getByText('68–70%')).toBeInTheDocument();
-    expect(screen.getByText('50%+')).toBeInTheDocument();
+    expect(screen.getByText('~2 min → 20 sec')).toBeInTheDocument();
+    expect(screen.getByText('~8 GB → 700 MB')).toBeInTheDocument();
+    expect(screen.getByText(/application I took over and later led/)).toBeInTheDocument();
+    expect(screen.getByText('MCP integrations')).toBeInTheDocument();
+    expect(screen.getByText('Certified Kubernetes Administrator (CKA)')).toBeInTheDocument();
+    expect(
+      screen.getByText('Certified Kubernetes Application Developer (CKAD)'),
+    ).toBeInTheDocument();
 
     await submitCommand(input, 'projects');
     expect(screen.getByText('Featured Projects:')).toBeInTheDocument();
@@ -77,7 +83,9 @@ describe('Terminal', () => {
       'href',
       'https://www.linkedin.com/in/b-shchavinskyi-fullstack',
     );
-    expect(screen.queryByRole('link', { name: '[Download PDF]' })).not.toBeInTheDocument();
+    const resumeLink = screen.getByRole('link', { name: '[Download PDF]' });
+    expect(resumeLink).toHaveAttribute('href', '/Bogdan_Shchavinskyi_CV.pdf');
+    expect(resumeLink).toHaveAttribute('download', 'Bogdan_Shchavinskyi_CV.pdf');
 
     await submitCommand(input, 'does-not-exist');
     expect(screen.getByText(/Command not found: does-not-exist/)).toBeInTheDocument();

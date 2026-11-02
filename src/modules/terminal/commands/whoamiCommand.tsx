@@ -4,37 +4,67 @@ import Typography from '@mui/material/Typography';
 import type { CommandHandler } from '../types';
 import { whoamiStyles } from './whoamiStyles';
 
-const ownershipAreas = [
-  'Architecture redesigns',
-  'Performance bottlenecks',
-  'Scaling issues',
-  'Integrations',
-  'Reliability',
-  'Legacy system evolution',
-] as const;
-
-const productionToolkit = [
-  'Node.js',
-  'Go',
-  'Kubernetes',
-  'AWS',
-  'CI/CD',
-  'Observability',
-  'Production operations',
+const expertiseSections = [
+  {
+    title: '[ TECHNICAL LEADERSHIP ]',
+    description:
+      'I stay hands-on while leading architecture decisions, code reviews, and delivery. My experience includes leading technical decisions across two engineering teams of 4 and 3 engineers.',
+    topics: ['Architecture', 'Performance', 'Scalability', 'Production reliability'],
+  },
+  {
+    title: '[ BACKEND & PLATFORM ]',
+    description:
+      'I build backend services and operate cloud infrastructure, from event-driven integrations and databases to Kubernetes deployments, CI/CD, and observability.',
+    topics: [
+      'TypeScript',
+      'Node.js',
+      'Go',
+      'AWS',
+      'Kubernetes',
+      'PostgreSQL',
+      'MongoDB',
+      'Redis',
+      'RabbitMQ',
+      'Prometheus',
+      'Grafana',
+    ],
+  },
+  {
+    title: '[ AGENTIC AI WORKFLOWS ]',
+    description:
+      'I introduce agentic AI workflows for development, code reviews, testing, and onboarding, and share these practices with the team.',
+    topics: [
+      'AI coding agents',
+      'Repository instructions',
+      'Reusable agent skills',
+      'MCP integrations',
+    ],
+  },
+  {
+    title: '[ CERTIFICATIONS ]',
+    description: 'CNCF / The Linux Foundation',
+    topics: [
+      'Certified Kubernetes Administrator (CKA)',
+      'Certified Kubernetes Application Developer (CKAD)',
+    ],
+  },
 ] as const;
 
 const impactHighlights = [
   {
     metric: '~$200K/year',
-    description: 'saved by building an in-house eSignature platform',
+    description:
+      'annual savings from replacing DocuSign with the in-house eSignature application I took over and later led',
   },
   {
-    metric: '68–70%',
-    description: 'reduction in critical backend response times',
+    metric: '~2 min → 20 sec',
+    description:
+      'PDF-generation time after rewriting an AWS Lambda from Node.js to Go; generated files were up to 80% smaller',
   },
   {
-    metric: '50%+',
-    description: 'improvement across performance-critical services',
+    metric: '~8 GB → 700 MB',
+    description:
+      'backend memory usage after refactoring a spreadsheet application; moving heavy calculations to the backend also brought saves for around 1 million rows below 1 second',
   },
 ] as const;
 
@@ -47,44 +77,29 @@ export const whoamiCommand: CommandHandler = () => {
         </Typography>
         <Typography sx={whoamiStyles.role}>Tech Lead / Senior Software Engineer</Typography>
         <Typography sx={whoamiStyles.summary}>
-          7+ years building and evolving backend systems, cloud infrastructure, and production
-          platforms.
+          8+ years building backend systems and running cloud infrastructure, focused on
+          architecture, performance, scalability, and production reliability.
+        </Typography>
+        <Typography sx={whoamiStyles.paragraph}>
+          Open to remote, B2B, contractor roles, and relocation.
         </Typography>
       </Box>
 
-      <Box component="section" sx={whoamiStyles.section}>
-        <Typography component="h3" sx={whoamiStyles.sectionTitle}>
-          [ BROAD OWNERSHIP ]
-        </Typography>
-        <Typography sx={whoamiStyles.paragraph}>
-          I specialize in complex technical problems that require ownership across architecture and
-          implementation—especially systems that have outgrown their original design.
-        </Typography>
-        <Box component="ul" sx={whoamiStyles.tags}>
-          {ownershipAreas.map((area) => (
-            <Box component="li" key={area} sx={whoamiStyles.tag}>
-              {area}
-            </Box>
-          ))}
+      {expertiseSections.map(({ title, description, topics }) => (
+        <Box component="section" key={title} sx={whoamiStyles.section}>
+          <Typography component="h3" sx={whoamiStyles.sectionTitle}>
+            {title}
+          </Typography>
+          <Typography sx={whoamiStyles.paragraph}>{description}</Typography>
+          <Box component="ul" sx={whoamiStyles.tags}>
+            {topics.map((topic) => (
+              <Box component="li" key={topic} sx={whoamiStyles.tag}>
+                {topic}
+              </Box>
+            ))}
+          </Box>
         </Box>
-      </Box>
-
-      <Box component="section" sx={whoamiStyles.section}>
-        <Typography component="h3" sx={whoamiStyles.sectionTitle}>
-          [ SYSTEMS &amp; OPERATIONS ]
-        </Typography>
-        <Typography sx={whoamiStyles.paragraph}>
-          Backend architecture and hands-on implementation combined with cloud infrastructure,
-          delivery pipelines, observability, and production operations.
-        </Typography>
-        <Box component="ul" sx={whoamiStyles.tags}>
-          {productionToolkit.map((technology) => (
-            <Box component="li" key={technology} sx={whoamiStyles.tag}>
-              {technology}
-            </Box>
-          ))}
-        </Box>
-      </Box>
+      ))}
 
       <Box component="section" sx={whoamiStyles.section}>
         <Typography component="h3" sx={whoamiStyles.sectionTitle}>

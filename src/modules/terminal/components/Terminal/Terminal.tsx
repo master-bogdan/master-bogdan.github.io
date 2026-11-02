@@ -14,6 +14,14 @@ export function Terminal(): ReactElement {
   const { completeBoot, currentOutput, executeCommand, isBooting, outputRef, visibleCommands } =
     useTerminal();
 
+  const scrollToOutputEnd = (): void => {
+    const output = outputRef.current;
+
+    if (output) {
+      output.scrollTop = output.scrollHeight;
+    }
+  };
+
   return (
     <Box sx={terminalStyles.viewport}>
       <Container maxWidth={false} sx={terminalStyles.container}>
@@ -28,7 +36,9 @@ export function Terminal(): ReactElement {
           {currentOutput ? (
             <Box sx={terminalStyles.currentOutput}>
               <Box sx={terminalStyles.commandLabel}>$ {currentOutput.command}</Box>
-              <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
+              <TypewriterOutput key={currentOutput.id} onComplete={scrollToOutputEnd}>
+                {currentOutput.output}
+              </TypewriterOutput>
             </Box>
           ) : null}
         </Box>

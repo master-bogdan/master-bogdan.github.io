@@ -9,7 +9,7 @@ import { normalizeBasePath } from './src/config/normalizeBasePath.ts';
 import { createBlogPosts, type BlogPostSource } from './src/modules/blog/build.ts';
 
 const ProjectDirectory = import.meta.dirname;
-const DefaultBasePath = '/personal-website/';
+const DefaultBasePath = '/';
 
 const readBlogPostSource = async (relativePath: string): Promise<BlogPostSource> => {
   const absolutePath = path.join(ProjectDirectory, relativePath);

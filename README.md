@@ -17,31 +17,33 @@ npx playwright install chromium
 npm run dev
 ```
 
-The production site is served below `/personal-website/` by default. Override it with `VITE_BASE_PATH` when a deployment uses a different root-relative path. Traversal, protocol-relative paths, query strings, fragments, and special characters fail the build.
+The production site is served at `/` by default. Override it with `VITE_BASE_PATH` when a deployment uses a different root-relative path. Traversal, protocol-relative paths, query strings, fragments, and special characters fail the build.
 
 ## GitHub Pages
 
 This standalone repository is the home for the public portfolio. The original homelab copy is retained separately; changes are not synchronized automatically.
 
-The deployment URL is `https://master-bogdan.github.io/personal-website/` once Pages is enabled and the workflow succeeds.
+The deployment URL is `https://master-bogdan.github.io/` once Pages is enabled and the workflow succeeds.
 
-1. Push this repository to `master-bogdan/personal-website` on `main`.
+1. Push this repository to `master-bogdan/master-bogdan.github.io` on `main`.
 2. In **Settings → Pages → Build and deployment**, select **GitHub Actions** as the source.
 3. Run **Validate and deploy website** from the Actions tab, or rerun the first workflow if it ran before Pages was enabled.
 
-The workflow installs the Node version in `.nvmrc` and npm `11.17.0`, then runs formatting, lint, TypeScript, coverage, the production build, and Chromium tests. Pull requests run validation only. Successful pushes to `main` publish `build/` using GitHub's Pages actions and the built-in `GITHUB_TOKEN`; no personal access token is needed.
+The workflow installs the Node version in `.nvmrc` and npm `11.17.0`, then runs formatting, lint, TypeScript, coverage, the production build, and Chromium tests. Browser tests cover the terminal, CV downloads, SEO metadata, and the no-JavaScript profile at both a test subdirectory (`/preview/`) and the configured deployment path (normally `/`). The final validation rebuilds the configured deployment path before uploading the site. Pull requests run validation only. Successful pushes to `main` publish `build/` using GitHub's Pages actions and the built-in `GITHUB_TOKEN`; no personal access token is needed.
 
-The workflow sets `VITE_BASE_PATH=/personal-website/`. For a custom domain, configure the domain in Pages settings and set the repository Actions variable `VITE_BASE_PATH` to `/`, then redeploy. The same override works locally:
+The workflow defaults to `VITE_BASE_PATH=/` for the user site. For a custom domain, configure the domain in Pages settings and keep the root base path. To test a subdirectory deployment locally:
 
 ```bash
-VITE_BASE_PATH=/ npm run validate
+VITE_BASE_PATH=/preview/ npm run validate
 ```
 
 For the standard repository URL, use `npm run validate`. The browser tests use the production base path, including overrides from `.env.production` or the environment. Do not commit local environment files or put secrets in `VITE_` variables; their values can become part of the browser bundle.
 
 ### Public CV
 
-The outdated CV PDF was deliberately excluded from this repository. The `resume` command currently links to the existing LinkedIn profile. Once a reviewed, updated public CV is available, add it under `public/`, restore the download link using `appConfig.basePath`, and update the command description and tests. Files in `public/` are copied into the published site.
+The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command downloads it with that filename and also links to LinkedIn. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
+
+When replacing the CV, keep the public filename stable and update `whoami`, banner text, and SEO/profile metadata in `index.html` to match. Run `npm run assets:generate` after banner changes so the social preview stays current, then run `npm run validate`.
 
 ## Favicon, Sharing, and Search
 
@@ -55,11 +57,9 @@ npm run assets:generate
 
 This uses the existing Playwright Chromium installation; it is not part of the production build.
 
-The homepage sitemap is published at `https://master-bogdan.github.io/personal-website/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
+The homepage sitemap is published at `https://master-bogdan.github.io/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
 
 When changing the public domain or deployment path, update the absolute URLs in `index.html` and `public/sitemap.xml` along with `VITE_BASE_PATH`. Favicon and touch-icon links already follow the Vite base path. The canonical and sharing URLs intentionally point to production even during local development.
-
-GitHub Pages project sites live under a subdirectory. A `robots.txt` inside this repository would not control crawling: search engines read it from the hostname root. Google also chooses search-result favicons per hostname, so this project's browser favicon may not appear separately in Google results. A custom domain gives the site its own hostname.
 
 The sitemap includes only the homepage because blog posts currently open inside the terminal, without individual URLs. Independent post indexing would require real post URLs and crawlable post content.
 
