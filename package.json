@@ -21,6 +21,7 @@
     }
   },
   "scripts": {
+    "assets:generate": "node scripts/generate-brand-assets.mjs",
     "build": "tsc --noEmit && vite build",
     "dev": "vite",
     "format": "prettier --write .",
