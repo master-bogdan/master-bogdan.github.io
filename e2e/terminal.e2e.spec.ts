@@ -63,3 +63,21 @@ test('boots, accepts keyboard commands, and opens a Markdown post', async ({ pag
     await readFile(new URL('../public/Bogdan_Shchavinskyi_CV.pdf', import.meta.url)),
   );
 });
+
+test('keeps the CV download in view after typing in a short window', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 500 });
+  await page.goto('./');
+
+  const commandInput = page.getByRole('textbox', { name: 'Terminal command' });
+  await commandInput.fill('resume');
+  await commandInput.press('Enter');
+
+  const resumeLink = page.getByRole('link', { name: '[Download PDF]' });
+  await expect(resumeLink).toBeInViewport({ ratio: 1 });
+
+  const downloadPromise = page.waitForEvent('download');
+  await resumeLink.click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('Bogdan_Shchavinskyi_CV.pdf');
+  expect(await download.failure()).toBeNull();
+});

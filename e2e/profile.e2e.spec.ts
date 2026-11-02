@@ -6,7 +6,7 @@ test('serves profile and sharing metadata without JavaScript', async ({ page }) 
   await page.goto('./');
 
   const title = 'Bogdan Shchavinskyi | Tech Lead / Senior Software Engineer';
-  const productionUrl = 'https://master-bogdan.github.io/personal-website/';
+  const productionUrl = 'https://master-bogdan.github.io/';
   await expect(page).toHaveTitle(title);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', productionUrl);
 

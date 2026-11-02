@@ -16,7 +16,7 @@
 
 **Static Build**: deployable browser assets emitted to `build/` by Vite.
 
-**Base Path**: the URL prefix used for the application and local assets; it defaults to `/personal-website/`.
+**Base Path**: the URL prefix used for the application and local assets; it defaults to `/`.
 
 ## Relationships
 

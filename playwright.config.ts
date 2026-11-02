@@ -4,7 +4,7 @@ import { loadEnv } from 'vite';
 import { normalizeBasePath } from './src/config/normalizeBasePath';
 
 const environment = loadEnv('production', import.meta.dirname, 'VITE_');
-const basePath = normalizeBasePath(environment.VITE_BASE_PATH ?? '/personal-website/');
+const basePath = normalizeBasePath(environment.VITE_BASE_PATH ?? '/');
 const BaseUrl = `http://127.0.0.1:4173${basePath}`;
 
 export default defineConfig({

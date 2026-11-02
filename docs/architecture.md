@@ -27,7 +27,7 @@ Modules expose public barrels. Internal components use relative imports so modul
 
 Vite discovers Markdown with `import.meta.glob` for the browser bundle. A build-only plugin independently checks that every `content/blog/*.md` entry is a regular file, reads it without following symbolic links, and runs the same parser before bundling. This makes invalid metadata and duplicate slugs hard build failures.
 
-The output directory remains `build/`. The default base path remains `/personal-website/`; `VITE_BASE_PATH` can override it with a validated root-relative URL path.
+The output directory remains `build/`. The default base path remains `/`; `VITE_BASE_PATH` can override it with a validated root-relative URL path.
 
 ## Test Boundaries
 
