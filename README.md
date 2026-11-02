@@ -43,20 +43,41 @@ For the standard repository URL, use `npm run validate`. The browser tests use t
 
 The outdated CV PDF was deliberately excluded from this repository. The `resume` command currently links to the existing LinkedIn profile. Once a reviewed, updated public CV is available, add it under `public/`, restore the download link using `appConfig.basePath`, and update the command description and tests. Files in `public/` are copied into the published site.
 
+## Favicon, Sharing, and Search
+
+`index.html` contains the page title, description, canonical URL, Open Graph and Twitter sharing metadata, and Person structured data using the existing public profile details. These are present in the initial HTML without running JavaScript. A `noscript` profile gives visitors with JavaScript disabled a short introduction and links to GitHub and LinkedIn.
+
+The favicon uses the banner's cyan and green terminal styling. The sharing preview uses the existing banner on a 1200 × 630 background. After editing `public/favicon.svg` or `public/banner.svg`, regenerate the committed PNG assets:
+
+```bash
+npm run assets:generate
+```
+
+This uses the existing Playwright Chromium installation; it is not part of the production build.
+
+The homepage sitemap is published at `https://master-bogdan.github.io/personal-website/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
+
+When changing the public domain or deployment path, update the absolute URLs in `index.html` and `public/sitemap.xml` along with `VITE_BASE_PATH`. Favicon and touch-icon links already follow the Vite base path. The canonical and sharing URLs intentionally point to production even during local development.
+
+GitHub Pages project sites live under a subdirectory. A `robots.txt` inside this repository would not control crawling: search engines read it from the hostname root. Google also chooses search-result favicons per hostname, so this project's browser favicon may not appear separately in Google results. A custom domain gives the site its own hostname.
+
+The sitemap includes only the homepage because blog posts currently open inside the terminal, without individual URLs. Independent post indexing would require real post URLs and crawlable post content.
+
 ## Commands
 
-| Command                 | Purpose                                                           |
-| ----------------------- | ----------------------------------------------------------------- |
-| `npm run dev`           | Start the Vite development server                                 |
-| `npm run build`         | Type-check, validate posts, and write the static site to `build/` |
-| `npm run preview`       | Preview the production build                                      |
-| `npm test`              | Run Vitest once                                                   |
-| `npm run test:watch`    | Run Vitest in watch mode                                          |
-| `npm run test:coverage` | Enforce 80% statements, branches, functions, and lines            |
-| `npm run test:e2e`      | Run the Chromium Playwright journey                               |
-| `npm run lint`          | Run ESLint with zero warnings                                     |
-| `npm run format:check`  | Check Prettier formatting                                         |
-| `npm run validate`      | Run every production gate                                         |
+| Command                   | Purpose                                                           |
+| ------------------------- | ----------------------------------------------------------------- |
+| `npm run assets:generate` | Regenerate favicon PNGs, Apple touch icon, and sharing preview    |
+| `npm run dev`             | Start the Vite development server                                 |
+| `npm run build`           | Type-check, validate posts, and write the static site to `build/` |
+| `npm run preview`         | Preview the production build                                      |
+| `npm test`                | Run Vitest once                                                   |
+| `npm run test:watch`      | Run Vitest in watch mode                                          |
+| `npm run test:coverage`   | Enforce 80% statements, branches, functions, and lines            |
+| `npm run test:e2e`        | Run the Chromium Playwright journey                               |
+| `npm run lint`            | Run ESLint with zero warnings                                     |
+| `npm run format:check`    | Check Prettier formatting                                         |
+| `npm run validate`        | Run every production gate                                         |
 
 ## Write A Blog Post
 
