@@ -8,6 +8,27 @@ describe('TypewriterOutput', () => {
     vi.useRealTimers();
   });
 
+  it('animates static sibling elements without missing-key warnings', async () => {
+    vi.useFakeTimers();
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    try {
+      render(
+        <TypewriterOutput speed={10}>
+          <div>
+            <span>One</span>
+            <span>Two</span>
+          </div>
+        </TypewriterOutput>,
+      );
+      await act(() => vi.advanceTimersByTimeAsync(40));
+      expect(screen.getByText('T')).toBeInTheDocument();
+      expect(consoleError).not.toHaveBeenCalled();
+    } finally {
+      consoleError.mockRestore();
+    }
+  });
+
   it('reveals nested content and reports completion', async () => {
     vi.useFakeTimers();
     const onComplete = vi.fn();

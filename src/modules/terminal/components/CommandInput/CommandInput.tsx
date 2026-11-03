@@ -78,7 +78,12 @@ export function CommandInput({ onCommand, disabled = false }: CommandInputProps)
         />
         <Box component="span" sx={commandInputStyles.visibleInput}>
           {input}
-          <Box aria-hidden="true" component="span" sx={[commandInputStyles.cursor, cursorStyle]} />
+          <Box
+            aria-hidden="true"
+            data-terminal-cursor=""
+            component="span"
+            sx={[commandInputStyles.cursor, cursorStyle]}
+          />
         </Box>
       </Box>
     </Box>

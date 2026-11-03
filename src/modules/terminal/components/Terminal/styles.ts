@@ -13,7 +13,8 @@ export const terminalStyles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
+    height: { xs: '100%', md: 'min(100%, calc(60dvh + 100px))' },
+    '@media (max-height: 700px)': { height: '100%' },
     minHeight: 0,
     overflow: 'hidden',
     maxWidth: { xs: '100%', sm: '90ch', md: '120ch' },

@@ -3,8 +3,8 @@ export const bannerStyles = {
     display: 'block',
     width: '100%',
     height: 'auto',
-    maxHeight: '28dvh',
+    maxHeight: { xs: 'none', md: '28dvh' },
     objectFit: 'contain',
-    mb: 2,
+    mb: { xs: 1, md: 2 },
   },
 } as const;

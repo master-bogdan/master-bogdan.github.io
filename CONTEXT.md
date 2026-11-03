@@ -30,6 +30,7 @@
 
 - Command input is keyboard-first and remains focused after execution.
 - Boot and typewriter sequences clean up their timers.
+- Desktop uses a centered, bounded panel; mobile and short windows use the available height.
 - Only command output scrolls; the banner, quick commands, command label, and input stay fixed.
 - New output starts at the top. Blog lists and posts render immediately without typewriter animation.
 - Blog metadata errors and duplicate slugs stop the build.
