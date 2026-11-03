@@ -11,9 +11,9 @@ test('serves profile and sharing metadata without JavaScript', async ({ page }) 
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', productionUrl);
 
   const description = await page.locator('meta[name="description"]').getAttribute('content');
-  expect(description).toContain('8+ years');
-  expect(description).toContain('backend infrastructure, DevOps and platform engineering');
-  expect(description).toContain('CKA and CKAD certified');
+  expect(description).toContain('engineering portfolio and blog');
+  expect(description).toContain('backend systems, DevOps, platform engineering');
+  expect(description).toContain('agentic AI workflows');
 
   for (const selector of ['meta[property="og:title"]', 'meta[name="twitter:title"]']) {
     await expect(page.locator(selector)).toHaveAttribute('content', title);

@@ -2,11 +2,16 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'rea
 
 import type { CommandOutput } from '../types';
 
+type OutputOptions = {
+  readonly delayMs?: number;
+  readonly animate?: boolean;
+};
+
 type TerminalOutputController = {
   readonly clearOutput: () => void;
   readonly currentOutput: CommandOutput | null;
   readonly outputRef: RefObject<HTMLDivElement | null>;
-  readonly showOutput: (command: string, output: ReactNode, delayMs?: number) => void;
+  readonly showOutput: (command: string, output: ReactNode, options?: OutputOptions) => void;
 };
 
 export const useTerminalOutput = (): TerminalOutputController => {
@@ -27,7 +32,8 @@ export const useTerminalOutput = (): TerminalOutputController => {
 
   useEffect(() => {
     if (outputRef.current) {
-      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+      outputRef.current.scrollTop = 0;
+      outputRef.current.scrollLeft = 0;
     }
   }, [currentOutput]);
 
@@ -44,8 +50,9 @@ export const useTerminalOutput = (): TerminalOutputController => {
     setCurrentOutput(null);
   };
 
-  const showOutput = (command: string, output: ReactNode, delayMs = 0): void => {
-    const commandOutput = { id: nextOutputIdRef.current, command, output };
+  const showOutput = (command: string, output: ReactNode, options: OutputOptions = {}): void => {
+    const { delayMs = 0, animate = true } = options;
+    const commandOutput = { id: nextOutputIdRef.current, command, output, animate };
     nextOutputIdRef.current += 1;
 
     if (delayMs === 0) {

@@ -8,7 +8,7 @@ const expertiseSections = [
   {
     title: '[ TECHNICAL LEADERSHIP ]',
     description:
-      'I stay hands-on while leading architecture decisions, code reviews, and delivery. My experience includes leading technical decisions across two engineering teams of 4 and 3 engineers.',
+      'I work across system design, implementation, and code review, with a focus on clear architecture, maintainable code, and reliable delivery.',
     topics: ['Architecture', 'Performance', 'Scalability', 'Production reliability'],
   },
   {
@@ -81,7 +81,8 @@ export const whoamiCommand: CommandHandler = () => {
           architecture, performance, scalability, and production reliability.
         </Typography>
         <Typography sx={whoamiStyles.paragraph}>
-          Open to remote, B2B, contractor roles, and relocation.
+          This is where I share projects, technical notes, and lessons from building and running
+          software.
         </Typography>
       </Box>
 

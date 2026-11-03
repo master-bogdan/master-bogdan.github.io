@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, type ReactNode } from 'react';
+import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 
 export const countCharacters = (node: ReactNode): number => {
   if (typeof node === 'string') {
@@ -38,7 +38,7 @@ export const sliceContent = (
     const visibleChildren: ReactNode[] = [];
     let remaining = remainingCharacters;
 
-    for (const child of node) {
+    for (const child of Children.toArray(node)) {
       if (remaining <= 0) {
         break;
       }

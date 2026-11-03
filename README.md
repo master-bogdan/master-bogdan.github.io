@@ -57,6 +57,8 @@ npm run assets:generate
 
 This uses the existing Playwright Chromium installation; it is not part of the production build.
 
+The terminal selects `public/banner-mobile.svg` below 600px, `public/banner-tablet.svg` below 900px, and `public/banner.svg` for desktop. Keep their profile wording consistent when editing the banner; the social preview continues to use the desktop artwork.
+
 The homepage sitemap is published at `https://master-bogdan.github.io/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
 
 When changing the public domain or deployment path, update the absolute URLs in `index.html` and `public/sitemap.xml` along with `VITE_BASE_PATH`. Favicon and touch-icon links already follow the Vite base path. The canonical and sharing URLs intentionally point to production even during local development.

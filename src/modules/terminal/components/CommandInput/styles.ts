@@ -5,6 +5,18 @@ export const commandInputStyles = {
     display: 'flex',
     alignItems: 'center',
     gap: 1,
+    border: '1px solid transparent',
+    borderRadius: '4px',
+    padding: 0.5,
+    '&:focus-within': {
+      borderColor: ThemeColors.GREEN,
+      backgroundColor: 'rgba(0, 255, 0, 0.04)',
+    },
+    '&:not(:focus-within) [data-terminal-cursor]': {
+      backgroundColor: 'transparent',
+      outline: `1px solid ${ThemeColors.GREEN}`,
+      opacity: 0.6,
+    },
   },
   inputContainer: {
     position: 'relative',
@@ -31,6 +43,7 @@ export const commandInputStyles = {
     fontSize: { xs: '12px', sm: '14px' },
     color: ThemeColors.GREEN,
     whiteSpace: 'pre',
+    pointerEvents: 'none',
   },
   cursor: {
     display: 'inline-block',

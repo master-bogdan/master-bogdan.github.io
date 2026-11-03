@@ -7,7 +7,7 @@ describe('Blog posts', () => {
     const posts = getBlogPosts();
     const welcomePost = getBlogPost('welcome');
 
-    expect(posts).toHaveLength(1);
+    expect(posts).toContainEqual(welcomePost);
     expect(welcomePost).toMatchObject({
       slug: 'welcome',
       title: 'Welcome to My Terminal',
