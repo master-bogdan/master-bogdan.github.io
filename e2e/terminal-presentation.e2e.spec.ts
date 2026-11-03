@@ -47,8 +47,12 @@ test('selects readable mobile and tablet banners when resized', async ({ page })
   }
 });
 
-test('keeps tablet banner text comfortably inside its frame', async ({ page }) => {
+test('keeps the complete tablet banner comfortably inside its frame', async ({ page }) => {
   await page.goto('banner-tablet.svg');
+  await expect(
+    page.locator('text').filter({ hasText: 'Node.js · Go · Kubernetes · AWS' }),
+  ).toBeVisible();
+  await expect(page.locator('#penguin')).toBeVisible();
   const margins = await page.locator('svg').evaluate((svg) => {
     const border = svg.querySelector<SVGRectElement>('rect[stroke]');
     if (!border) {
