@@ -46,3 +46,31 @@ test('selects readable mobile and tablet banners when resized', async ({ page })
     await expect(banner).toBeInViewport({ ratio: 1 });
   }
 });
+
+test('keeps tablet banner text comfortably inside its frame', async ({ page }) => {
+  await page.goto('banner-tablet.svg');
+  const margins = await page.locator('svg').evaluate((svg) => {
+    const border = svg.querySelector<SVGRectElement>('rect[stroke]');
+    if (!border) {
+      throw new Error('Tablet banner must have a frame');
+    }
+    const frame = border.getBoundingClientRect();
+    const scale = frame.width / border.width.baseVal.value;
+    return [...svg.querySelectorAll('text')].map((text) => {
+      const bounds = text.getBoundingClientRect();
+      return {
+        text: text.textContent,
+        top: (bounds.y - frame.y) / scale,
+        bottom: (frame.y + frame.height - bounds.y - bounds.height) / scale,
+        left: (bounds.x - frame.x) / scale,
+        right: (frame.x + frame.width - bounds.x - bounds.width) / scale,
+      };
+    });
+  });
+  expect(margins.length).toBeGreaterThan(0);
+  for (const { text, top, bottom, left, right } of margins) {
+    for (const margin of [top, bottom, left, right]) {
+      expect(margin, `Padding around "${text}"`).toBeGreaterThanOrEqual(10);
+    }
+  }
+});
