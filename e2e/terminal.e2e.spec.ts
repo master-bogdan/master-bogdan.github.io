@@ -4,6 +4,7 @@ import { expect, test } from '@playwright/test';
 
 test('boots, accepts keyboard commands, and opens a Markdown post', async ({ page }) => {
   await page.goto('./');
+  const siteUrl = new URL('./', page.url());
 
   await expect(page.getByText('Initializing system...')).toBeVisible();
 
@@ -23,19 +24,19 @@ test('boots, accepts keyboard commands, and opens a Markdown post', async ({ pag
   await commandInput.press('Enter');
   await expect(page.getByText('Bogdan Shchavinskyi', { exact: true })).toBeVisible();
 
-  await page.getByRole('button', { name: 'blog', exact: true }).click();
-  await page.getByRole('button', { name: 'Welcome to My Terminal' }).click();
+  await page.getByRole('link', { name: 'blog', exact: true }).click();
+  await page.getByRole('link', { name: 'Welcome to My Terminal' }).click();
 
   await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
   await expect(page.getByText('Why a Terminal?')).toBeVisible();
 
   await expect(
     page.getByAltText(
-      'BogdanLabs.dev — Bogdan Shchavinskyi, Tech Lead / Senior Software Engineer — Backend Infrastructure, DevOps and Platform Engineering',
+      'Bogdan Shchavinskyi — Senior Software Engineer & Tech Lead — Building software products, cloud platforms, and agentic AI workflows—from architecture to production.',
     ),
-  ).toHaveAttribute('src', new URL('banner.svg', page.url()).pathname);
+  ).toHaveAttribute('src', new URL('banner.svg', siteUrl).pathname);
 
-  const bannerResponse = await page.request.get(new URL('banner.svg', page.url()).href);
+  const bannerResponse = await page.request.get(new URL('banner.svg', siteUrl).href);
   expect(bannerResponse.ok()).toBeTruthy();
   expect(bannerResponse.headers()['content-type']).toContain('image/svg+xml');
 
@@ -46,7 +47,7 @@ test('boots, accepts keyboard commands, and opens a Markdown post', async ({ pag
     'https://www.linkedin.com/in/b-shchavinskyi-fullstack',
   );
   const resumeLink = page.getByRole('link', { name: '[Download PDF]' });
-  const resumeUrl = new URL('Bogdan_Shchavinskyi_CV.pdf', page.url());
+  const resumeUrl = new URL('Bogdan_Shchavinskyi_CV.pdf', siteUrl);
   await expect(resumeLink).toHaveAttribute('href', resumeUrl.pathname);
   await expect(resumeLink).toHaveAttribute('download', 'Bogdan_Shchavinskyi_CV.pdf');
 

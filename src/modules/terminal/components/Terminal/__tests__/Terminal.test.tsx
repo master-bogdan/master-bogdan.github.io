@@ -40,6 +40,7 @@ const submitCommand = async (input: HTMLElement, command: string) => {
 
 describe('Terminal', () => {
   beforeEach(() => {
+    window.history.replaceState(null, '', '/');
     vi.useFakeTimers();
   });
 
@@ -61,7 +62,7 @@ describe('Terminal', () => {
     fireEvent.click(screen.getByRole('button', { name: 'whoami' }));
     await act(() => vi.advanceTimersByTimeAsync(40_000));
     expect(screen.getByText('Bogdan Shchavinskyi')).toBeInTheDocument();
-    expect(screen.getByText(/8\+ years building backend systems/)).toBeInTheDocument();
+    expect(screen.getByText(/8\+ years building software products/)).toBeInTheDocument();
     expect(screen.getByText('~$200K/year')).toBeInTheDocument();
     expect(screen.getByText('~2 min → 20 sec')).toBeInTheDocument();
     expect(screen.getByText('~8 GB → 700 MB')).toBeInTheDocument();
@@ -95,7 +96,7 @@ describe('Terminal', () => {
     const input = await bootTerminal();
 
     await submitCommand(input, 'blog');
-    const postLink = screen.getByRole('button', { name: 'Welcome to My Terminal' });
+    const postLink = screen.getByRole('link', { name: 'Welcome to My Terminal' });
     fireEvent.click(postLink);
     await act(() => vi.advanceTimersByTimeAsync(20_000));
 

@@ -22,7 +22,7 @@
   },
   "scripts": {
     "assets:generate": "node scripts/generate-brand-assets.mjs",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/prerender.mjs",
     "dev": "vite",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

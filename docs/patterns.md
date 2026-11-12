@@ -18,7 +18,7 @@ ComponentName/
 
 ## Registry Commands
 
-The terminal depends on one registry, not conditional logic spread through the UI. Visible command lists are derived from registry metadata. Interactive output uses `CommandContext` instead of browser-global events.
+The terminal depends on one registry, not conditional logic spread through the UI. Visible command lists are derived from registry metadata. Public content commands provide validated permalinks. Their output uses real anchors; the terminal handles same-origin navigation and native browser history.
 
 ## Pure Content Pipeline
 
@@ -36,3 +36,7 @@ Tests prefer stable seams: blog API results, terminal DOM behavior, and the app 
 - Global browser events for module communication
 - Runtime filesystem or server dependencies
 - Tests coupled to hook state or implementation order
+
+## Same View, Static And Interactive
+
+Public routes render the existing terminal both at build time and in the browser. Page content and styles share the same components, avoiding a separate crawler-only page. Hydration adds interaction to direct visits; regular homepage visits retain boot timing.

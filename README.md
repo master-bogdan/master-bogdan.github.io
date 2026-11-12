@@ -41,13 +41,13 @@ For the standard repository URL, use `npm run validate`. The browser tests use t
 
 ### Public CV
 
-The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command downloads it with that filename and also links to LinkedIn. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
+The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command and `/resume/` show a short professional presentation with the PDF download, LinkedIn, main technologies, selected impact, and certification artwork. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
 
 When replacing the CV, keep the public filename stable and update `whoami`, banner text, and SEO/profile metadata in `index.html` to match. Run `npm run assets:generate` after banner changes so the social preview stays current, then run `npm run validate`.
 
 ## Favicon, Sharing, and Search
 
-`index.html` contains the page title, description, canonical URL, Open Graph and Twitter sharing metadata, and Person structured data using the existing public profile details. These are present in the initial HTML without running JavaScript. A `noscript` profile gives visitors with JavaScript disabled a short introduction and links to GitHub and LinkedIn.
+`src/config/profile.ts` holds the shared identity and production URL. `index.html` provides the homepage defaults; `src/app/pageMetadata.ts` derives titles, descriptions, canonical URLs, sharing metadata, and structured data for each public route. These are present in the initial HTML without running JavaScript. A `noscript` profile gives visitors with JavaScript disabled a short introduction and links to GitHub and LinkedIn.
 
 The favicon uses the banner's cyan and green terminal styling. The sharing preview uses the existing banner on a 1200 × 630 background. After editing `public/favicon.svg` or `public/banner.svg`, regenerate the committed PNG assets:
 
@@ -59,11 +59,27 @@ This uses the existing Playwright Chromium installation; it is not part of the p
 
 The terminal selects `public/banner-mobile.svg` below 600px, `public/banner-tablet.svg` below 900px, and `public/banner.svg` for desktop. Keep their profile wording consistent when editing the banner; the social preview continues to use the desktop artwork.
 
-The homepage sitemap is published at `https://master-bogdan.github.io/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
+The sitemap is generated from all published public routes and is available at `https://master-bogdan.github.io/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
 
-When changing the public domain or deployment path, update the absolute URLs in `index.html` and `public/sitemap.xml` along with `VITE_BASE_PATH`. Favicon and touch-icon links already follow the Vite base path. The canonical and sharing URLs intentionally point to production even during local development.
+When changing the public domain or deployment path, update `profile.url` in `src/config/profile.ts` and the absolute sharing-image URLs in `index.html`, along with `VITE_BASE_PATH`. Favicon and touch-icon links already follow the Vite base path. The canonical and sharing URLs intentionally point to production even during local development.
 
-The sitemap includes only the homepage because blog posts currently open inside the terminal, without individual URLs. Independent post indexing would require real post URLs and crawlable post content.
+### Public terminal URLs
+
+The terminal stays the interface at every URL:
+
+- `/blog/` lists posts; `/blog/<slug>/` opens an article.
+- `/resume/` shows a short introduction with the CV download.
+- `/projects/` lists featured work; `/projects/<slug>/` opens a project.
+
+Links and corresponding commands update the URL without reloading the terminal. Browser Back and Forward restore earlier views. Direct visits skip boot and immediately show the requested content. The homepage keeps its boot sequence and hidden commands.
+
+After Vite builds, `scripts/prerender.mjs` renders the same React terminal into an `index.html` for each content URL, plus `sitemap.xml`. GitHub Pages therefore serves deep links and refreshes directly. Pages include their content and metadata before JavaScript runs; hydration adds keyboard commands and in-terminal navigation. Preview base paths are kept separate from `profile.url`, which always describes the actual production address.
+
+### Featured projects
+
+Edit `src/modules/projects/projects.ts` to maintain project descriptions, features, technologies, examples, and curated updates. Each update records a real date and a GitHub release or commit link. Project pages build from this local content; visiting the website does not fetch GitHub data. Put local preview assets in `public/projects/`.
+
+Certification and project-image sources are recorded in [Asset sources](docs/asset-credits.md).
 
 ## Commands
 
@@ -97,7 +113,7 @@ slug: useful-title
 Post content goes here.
 ```
 
-Commit and push a post to `main` to rebuild and deploy it. Markdown is bundled at build time; GitHub Pages needs no application server or Jekyll configuration. All posts in this directory become public. Posts open inside the terminal and do not currently have individual page URLs.
+Commit and push a post to `main` to rebuild and deploy it. Markdown is bundled at build time; GitHub Pages needs no application server or Jekyll configuration. All posts in this directory become public. Posts open inside the terminal at `/blog/<slug>/`; their HTML pages and sitemap entries are generated automatically during the build.
 
 `title`, `date`, and `slug` are required non-empty strings. Dates use `YYYY-MM-DD`. Slugs are normalized to lowercase, must contain only letters, numbers, and single hyphens, and must be unique. Posts must be regular `.md` files; symbolic links and YAML aliases are rejected. Invalid posts fail the production build. Posts are sorted newest first, then by slug. GitHub Flavored Markdown is supported. Put local post images under `public/blog/` and reference them as `/blog/image-name.png`.
 
@@ -110,6 +126,8 @@ public/              static assets
 src/app/             composition root and providers
 src/config/          runtime configuration
 src/modules/blog/    post parsing, lookup, and rendering
+src/modules/projects/ project descriptions, examples, and updates
+src/modules/navigation/ public terminal URL mapping
 src/modules/terminal terminal commands and interaction
 src/shared/          cross-module theme primitives
 src/test/            shared test setup

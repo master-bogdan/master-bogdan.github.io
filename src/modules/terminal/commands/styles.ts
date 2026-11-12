@@ -16,19 +16,9 @@ export const commandStyles = {
     color: ThemeColors.WHITE,
     mb: 0.5,
   },
-  indentedText: {
-    ...terminalText,
-    color: ThemeColors.WHITE,
-    ml: 2,
-  },
   muted: {
     ...terminalText,
     color: ThemeColors.MUTED,
-  },
-  resumeNote: {
-    ...terminalText,
-    color: ThemeColors.MUTED,
-    mt: 2,
   },
   link: {
     color: ThemeColors.GREEN,

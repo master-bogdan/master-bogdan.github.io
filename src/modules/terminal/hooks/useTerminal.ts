@@ -1,11 +1,13 @@
-import { useState, type RefObject } from 'react';
+import { useEffect, useEffectEvent, useState, type RefObject } from 'react';
+
+import { appConfig } from '@/config';
+import { routeCommand } from '@/modules/navigation';
 
 import { TerminalTimings } from '../constants';
-import { commandRegistry, getVisibleCommands, unknownCommand } from '../commands';
-import type { CommandContext, CommandOutput } from '../types';
+import { commandHref, commandOutput, commandRegistry, getVisibleCommands } from '../commands';
+import type { CommandOutput } from '../types';
 import { useTerminalOutput } from './useTerminalOutput';
 
-const ClearCommandName = 'clear';
 const HelpCommandName = 'help';
 const visibleCommands = getVisibleCommands();
 
@@ -18,41 +20,72 @@ type TerminalController = {
   readonly visibleCommands: readonly string[];
 };
 
-export const useTerminal = (): TerminalController => {
-  const [isBooting, setIsBooting] = useState(true);
-  const { clearOutput, currentOutput, outputRef, showOutput } = useTerminalOutput();
+const savedHistoryCommand = (state: unknown): string | null => {
+  if (typeof state !== 'object' || state === null || !('command' in state)) {
+    return null;
+  }
+  return typeof state.command === 'string' ? state.command : null;
+};
+
+export const useTerminal = (
+  initialPath: string,
+  onNavigate?: (pathname: string) => void,
+): TerminalController => {
+  const initialCommand = routeCommand(initialPath);
+  const [isBooting, setIsBooting] = useState(initialCommand === null);
+  const { clearOutput, currentOutput, outputRef, showOutput } = useTerminalOutput(() =>
+    initialCommand
+      ? { id: 0, command: initialCommand, output: commandOutput(initialCommand), animate: false }
+      : null,
+  );
+
+  const restoreLocation = useEffectEvent((event: PopStateEvent): void => {
+    const command =
+      savedHistoryCommand(event.state) ?? routeCommand(window.location.pathname) ?? HelpCommandName;
+    setIsBooting(false);
+    showOutput(command, commandOutput(command), { animate: false });
+    onNavigate?.(window.location.pathname);
+  });
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent): void => restoreLocation(event);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const executeCommand = (input: string): void => {
-    const [commandName, ...args] = input.trim().toLowerCase().split(/\s+/);
-    const commandContext: CommandContext = { executeCommand };
+    const [name] = input.trim().toLowerCase().split(/\s+/);
+    const isClear = name === 'clear';
+    const historyCommand = isClear ? HelpCommandName : input;
+    const href = commandHref(input) ?? appConfig.basePath;
+    const state = { command: historyCommand };
 
-    if (commandName === ClearCommandName) {
+    if (window.location.pathname !== href) {
+      window.history.pushState(state, '', href);
+    } else {
+      window.history.replaceState(state, '', href);
+    }
+    onNavigate?.(href);
+
+    if (isClear) {
       clearOutput();
-      showOutput(HelpCommandName, commandRegistry[HelpCommandName].execute([], commandContext), {
+      showOutput(HelpCommandName, commandOutput(HelpCommandName), {
         delayMs: TerminalTimings.CLEAR_HELP_DELAY_MS,
       });
       return;
     }
 
-    const command = commandRegistry[commandName];
-    const output = command ? command.execute(args, commandContext) : unknownCommand(commandName);
-
-    showOutput(input, output, { animate: command?.animateOutput ?? true });
+    showOutput(input, commandOutput(input), {
+      animate: commandRegistry[name]?.animateOutput ?? true,
+    });
   };
 
   const completeBoot = (): void => {
     setIsBooting(false);
-    showOutput(HelpCommandName, commandRegistry[HelpCommandName].execute([], { executeCommand }), {
+    showOutput(HelpCommandName, commandOutput(HelpCommandName), {
       delayMs: TerminalTimings.HELP_DELAY_MS,
     });
   };
 
-  return {
-    completeBoot,
-    currentOutput,
-    executeCommand,
-    isBooting,
-    outputRef,
-    visibleCommands,
-  };
+  return { completeBoot, currentOutput, executeCommand, isBooting, outputRef, visibleCommands };
 };

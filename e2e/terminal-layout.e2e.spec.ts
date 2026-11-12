@@ -19,7 +19,7 @@ for (const viewport of [
 
     const fixedElements = [
       page.getByRole('img'),
-      page.getByRole('button', { name: 'blog', exact: true }),
+      page.getByRole('link', { name: 'blog', exact: true }),
       page.getByText('$ whoami', { exact: true }),
       input,
     ];

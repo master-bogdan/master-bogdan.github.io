@@ -5,6 +5,8 @@ import type { ReactElement } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import { contentHref } from '@/modules/navigation';
+
 import { getBlogPost, getBlogPosts } from '../blogPosts';
 import type { BlogPost } from '../types';
 import { transformMarkdownUrl } from '../utils';
@@ -13,21 +15,19 @@ import { blogCommandStyles } from './styles';
 const DisallowedElements = ['script', 'iframe', 'form', 'input', 'button', 'style', 'link'];
 const RemarkPlugins = [remarkGfm];
 
-const blogPostListOutput = (onSelectPost: (slug: string) => void): ReactElement => {
+const blogPostListOutput = (): ReactElement => {
   const posts = getBlogPosts();
 
   return (
     <Box>
-      <Typography sx={blogCommandStyles.title}>Blog Posts:</Typography>
+      <Typography component="h1" sx={blogCommandStyles.title}>
+        Blog Posts:
+      </Typography>
       {posts.map((post, index) => (
         <Box key={post.slug} sx={blogCommandStyles.listItem}>
           <Typography sx={blogCommandStyles.listItemText}>
             {index + 1}.{' '}
-            <Link
-              component="button"
-              onClick={() => onSelectPost(post.slug)}
-              sx={blogCommandStyles.postLink}
-            >
+            <Link href={contentHref('blog', post.slug)} sx={blogCommandStyles.postLink}>
               {post.title}
             </Link>
           </Typography>
@@ -64,16 +64,16 @@ const blogPostContentOutput = (post: BlogPost): ReactElement => {
           {post.content}
         </ReactMarkdown>
       </Box>
+      <Link href={contentHref('blog')} sx={blogCommandStyles.postLink}>
+        ← All posts
+      </Link>
     </Box>
   );
 };
 
-export const blogCommand = (
-  args: readonly string[],
-  onSelectPost: (slug: string) => void,
-): ReactElement => {
+export const blogCommand = (args: readonly string[]): ReactElement => {
   if (args.length === 0) {
-    return blogPostListOutput(onSelectPost);
+    return blogPostListOutput();
   }
 
   const slug = args[0];

@@ -1,15 +1,12 @@
 import type { ReactNode } from 'react';
 
-export type CommandContext = {
-  readonly executeCommand: (input: string) => void;
-};
-
-export type CommandHandler = (args: readonly string[], context: CommandContext) => ReactNode;
+export type CommandHandler = (args: readonly string[]) => ReactNode;
 
 export type Command = {
   readonly name: string;
   readonly description: string;
   readonly execute: CommandHandler;
+  readonly href?: (args: readonly string[]) => string | undefined;
   readonly hidden?: boolean;
   readonly animateOutput?: boolean;
 };

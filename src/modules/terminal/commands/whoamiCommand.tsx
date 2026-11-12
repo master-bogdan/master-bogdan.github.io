@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import { profile } from '@/config';
+
 import type { CommandHandler } from '../types';
 import { whoamiStyles } from './whoamiStyles';
 
@@ -32,7 +34,7 @@ const expertiseSections = [
   {
     title: '[ AGENTIC AI WORKFLOWS ]',
     description:
-      'I introduce agentic AI workflows for development, code reviews, testing, and onboarding, and share these practices with the team.',
+      'I build agentic AI workflows and tooling, including local-model integrations, custom MCP tools, web search, and repository knowledge retrieval. I also bring AI-assisted development, reviews, testing, and onboarding practices to engineering teams.',
     topics: [
       'AI coding agents',
       'Repository instructions',
@@ -75,10 +77,10 @@ export const whoamiCommand: CommandHandler = () => {
         <Typography component="h2" sx={whoamiStyles.name}>
           Bogdan Shchavinskyi
         </Typography>
-        <Typography sx={whoamiStyles.role}>Tech Lead / Senior Software Engineer</Typography>
+        <Typography sx={whoamiStyles.role}>{profile.role}</Typography>
         <Typography sx={whoamiStyles.summary}>
-          8+ years building backend systems and running cloud infrastructure, focused on
-          architecture, performance, scalability, and production reliability.
+          8+ years building software products and cloud platforms, focused on architecture,
+          performance, scalability, and production reliability.
         </Typography>
         <Typography sx={whoamiStyles.paragraph}>
           This is where I share projects, technical notes, and lessons from building and running

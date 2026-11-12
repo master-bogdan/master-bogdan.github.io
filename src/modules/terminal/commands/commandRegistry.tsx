@@ -1,4 +1,8 @@
-import { blogCommand } from '@/modules/blog';
+import type { ReactNode } from 'react';
+
+import { blogCommand, getBlogPost } from '@/modules/blog';
+import { contentHref } from '@/modules/navigation';
+import { getProject, projectsCommand } from '@/modules/projects';
 
 import type { Command } from '../types';
 import { contactsCommand } from './contactsCommand';
@@ -13,9 +17,9 @@ import {
   rickrollCommand,
   sudoCommand,
 } from './hidden';
-import { projectsCommand } from './projectsCommand';
 import { resumeCommand } from './resumeCommand';
 import { whoamiCommand } from './whoamiCommand';
+import { unknownCommand } from './unknownCommand';
 
 export const commandRegistry: Readonly<Record<string, Command>> = {
   whoami: {
@@ -27,12 +31,16 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
     name: 'projects',
     description: 'List featured projects',
     execute: projectsCommand,
+    animateOutput: false,
+    href: (args) =>
+      !args[0] || getProject(args[0]) ? contentHref('projects', args[0]) : undefined,
   },
   blog: {
     name: 'blog',
     description: 'Read blog posts',
     animateOutput: false,
-    execute: (args, context) => blogCommand(args, (slug) => context.executeCommand(`blog ${slug}`)),
+    execute: blogCommand,
+    href: (args) => (!args[0] || getBlogPost(args[0]) ? contentHref('blog', args[0]) : undefined),
   },
   contacts: {
     name: 'contacts',
@@ -43,6 +51,8 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
     name: 'resume',
     description: 'Download my resume',
     execute: resumeCommand,
+    animateOutput: false,
+    href: () => contentHref('resume'),
   },
   clear: {
     name: 'clear',
@@ -108,4 +118,15 @@ export const getVisibleCommands = (): readonly string[] => {
   return Object.values(commandRegistry)
     .filter((command) => !command.hidden)
     .map((command) => command.name);
+};
+
+export const commandHref = (input: string): string | undefined => {
+  const [name, ...args] = input.trim().toLowerCase().split(/\s+/);
+  return commandRegistry[name]?.href?.(args);
+};
+
+export const commandOutput = (input: string): ReactNode => {
+  const [name, ...args] = input.trim().toLowerCase().split(/\s+/);
+  const command = commandRegistry[name];
+  return command ? command.execute(args) : unknownCommand(name);
 };

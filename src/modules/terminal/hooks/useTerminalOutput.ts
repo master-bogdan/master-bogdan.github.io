@@ -14,8 +14,10 @@ type TerminalOutputController = {
   readonly showOutput: (command: string, output: ReactNode, options?: OutputOptions) => void;
 };
 
-export const useTerminalOutput = (): TerminalOutputController => {
-  const [currentOutput, setCurrentOutput] = useState<CommandOutput | null>(null);
+export const useTerminalOutput = (
+  initialOutput: () => CommandOutput | null,
+): TerminalOutputController => {
+  const [currentOutput, setCurrentOutput] = useState(initialOutput);
   const outputRef = useRef<HTMLDivElement>(null);
   const nextOutputIdRef = useRef(1);
   const timersRef = useRef(new Set<number>());
