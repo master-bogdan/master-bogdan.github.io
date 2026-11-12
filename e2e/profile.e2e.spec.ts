@@ -5,14 +5,14 @@ test.use({ javaScriptEnabled: false });
 test('serves profile and sharing metadata without JavaScript', async ({ page }) => {
   await page.goto('./');
 
-  const title = 'Bogdan Shchavinskyi | Tech Lead / Senior Software Engineer';
+  const title = 'Bogdan Shchavinskyi | Senior Software Engineer & Tech Lead';
   const productionUrl = 'https://master-bogdan.github.io/';
   await expect(page).toHaveTitle(title);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', productionUrl);
 
   const description = await page.locator('meta[name="description"]').getAttribute('content');
   expect(description).toContain('engineering portfolio and blog');
-  expect(description).toContain('backend systems, DevOps, platform engineering');
+  expect(description).toContain('cloud platforms, DevOps, platform engineering');
   expect(description).toContain('agentic AI workflows');
 
   for (const selector of ['meta[property="og:title"]', 'meta[name="twitter:title"]']) {
@@ -33,7 +33,7 @@ test('serves profile and sharing metadata without JavaScript', async ({ page }) 
   expect(JSON.parse(structuredData!)).toMatchObject({
     '@type': 'Person',
     name: 'Bogdan Shchavinskyi',
-    jobTitle: 'Tech Lead / Senior Software Engineer',
+    jobTitle: 'Senior Software Engineer & Tech Lead',
     url: productionUrl,
     description,
     knowsAbout: expect.arrayContaining(['DevOps', 'Platform engineering', 'Agentic AI workflows']),
@@ -45,7 +45,7 @@ test('offers a readable profile and working CV download without JavaScript', asy
 
   await expect(page.getByRole('heading', { name: 'Bogdan Shchavinskyi' })).toBeVisible();
   await expect(
-    page.getByText('Tech Lead / Senior Software Engineer', { exact: true }),
+    page.getByText('Senior Software Engineer & Tech Lead', { exact: true }),
   ).toBeVisible();
   await expect(page.getByText(/CKA and CKAD certified/)).toBeVisible();
 

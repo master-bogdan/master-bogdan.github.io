@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import type { ReactElement } from 'react';
 
-import { appConfig } from '@/config';
+import { appConfig, profile } from '@/config';
 
 import { bannerStyles } from './styles';
 
@@ -13,7 +13,7 @@ export function Banner(): ReactElement {
       <Box
         component="img"
         src={`${appConfig.basePath}banner.svg`}
-        alt="BogdanLabs.dev — Bogdan Shchavinskyi, Tech Lead / Senior Software Engineer — Backend Infrastructure, DevOps and Platform Engineering"
+        alt={`${profile.name} — ${profile.role} — ${profile.tagline}`}
         sx={bannerStyles.image}
       />
     </picture>

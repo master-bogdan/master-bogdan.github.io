@@ -30,6 +30,15 @@ describe('transformMarkdownUrl', () => {
     expect(transformMarkdownUrl('/contact', 'href', markdownNode('a'))).toBe('/contact');
   });
 
+  it('keeps public content links under the deployment base path', () => {
+    expect(transformMarkdownUrl('/blog/welcome/', 'href', markdownNode('a'))).toBe(
+      '/personal-website/blog/welcome/',
+    );
+    expect(transformMarkdownUrl('/projects/local-ai-lab/', 'href', markdownNode('a'))).toBe(
+      '/personal-website/projects/local-ai-lab/',
+    );
+  });
+
   it('removes unsafe protocols', () => {
     expect(transformMarkdownUrl('javascript:alert(1)', 'href', markdownNode('a'))).toBe('');
   });

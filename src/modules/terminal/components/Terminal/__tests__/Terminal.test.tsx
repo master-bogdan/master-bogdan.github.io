@@ -40,6 +40,7 @@ const submitCommand = async (input: HTMLElement, command: string) => {
 
 describe('Terminal', () => {
   beforeEach(() => {
+    window.history.replaceState(null, '', '/');
     vi.useFakeTimers();
   });
 
@@ -61,12 +62,19 @@ describe('Terminal', () => {
     fireEvent.click(screen.getByRole('button', { name: 'whoami' }));
     await act(() => vi.advanceTimersByTimeAsync(40_000));
     expect(screen.getByText('Bogdan Shchavinskyi')).toBeInTheDocument();
-    expect(screen.getByText(/8\+ years building backend systems/)).toBeInTheDocument();
+    expect(screen.getByText(/8\+ years building software products/)).toBeInTheDocument();
     expect(screen.getByText('~$200K/year')).toBeInTheDocument();
     expect(screen.getByText('~2 min → 20 sec')).toBeInTheDocument();
     expect(screen.getByText('~8 GB → 700 MB')).toBeInTheDocument();
     expect(screen.getByText(/application I took over and later led/)).toBeInTheDocument();
     expect(screen.getByText('MCP integrations')).toBeInTheDocument();
+    expect(screen.getByText('React')).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: 'Certified Kubernetes Administrator (CKA)' }),
+    ).toHaveAttribute('src', '/certifications/cka.svg');
+    expect(
+      screen.getByRole('img', { name: 'Certified Kubernetes Application Developer (CKAD)' }),
+    ).toHaveAttribute('src', '/certifications/ckad.svg');
     expect(screen.getByText('Certified Kubernetes Administrator (CKA)')).toBeInTheDocument();
     expect(
       screen.getByText('Certified Kubernetes Application Developer (CKAD)'),
@@ -95,7 +103,7 @@ describe('Terminal', () => {
     const input = await bootTerminal();
 
     await submitCommand(input, 'blog');
-    const postLink = screen.getByRole('button', { name: 'Welcome to My Terminal' });
+    const postLink = screen.getByRole('link', { name: 'Welcome to My Terminal' });
     fireEvent.click(postLink);
     await act(() => vi.advanceTimersByTimeAsync(20_000));
 
@@ -106,7 +114,7 @@ describe('Terminal', () => {
     expect(screen.getByText(/Post 'missing' not found/)).toBeInTheDocument();
   });
 
-  it('renders a complete long blog post without advancing typing timers', async () => {
+  it('animates a long blog post and eventually reveals its complete content', async () => {
     const input = await bootTerminal();
     fireEvent.change(input, { target: { value: 'BLOG ai-slop-era' } });
     const form = input.closest('form');
@@ -116,6 +124,9 @@ describe('Terminal', () => {
     }
 
     fireEvent.submit(form);
+
+    expect(screen.queryByText(/Keep the garbage out of your project/)).not.toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(100_000));
 
     expect(screen.getByText(/Keep the garbage out of your project/)).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);

@@ -14,6 +14,8 @@ This package is a static Vite/React terminal portfolio. Preserve command names, 
 
 - App composition: `src/app/`
 - Build/base path: `vite.config.ts`, `src/config/`
+- Public routes and static HTML: `src/modules/navigation/`, `src/app/pageMetadata.ts`, `src/app/renderPortfolio.tsx`, `scripts/prerender.mjs`
+- Featured projects and update logs: `src/modules/projects/`
 - Blog ingestion: `src/modules/blog/blogPosts.ts`, `src/modules/blog/utils/`
 - Blog command rendering: `src/modules/blog/commands/`
 - Command behavior: `src/modules/terminal/commands/`

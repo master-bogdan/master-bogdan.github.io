@@ -1,12 +1,19 @@
 import { Terminal } from '@/modules/terminal';
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
+import { appConfig } from '@/config';
 import { AppThemeProvider } from './providers';
+import { updatePageMetadata } from './pageMetadata';
 
-export function App(): ReactElement {
+type AppProps = { readonly initialPath?: string };
+
+export function App({
+  initialPath = typeof window === 'undefined' ? appConfig.basePath : window.location.pathname,
+}: AppProps): ReactElement {
+  useEffect(() => updatePageMetadata(initialPath), [initialPath]);
   return (
     <AppThemeProvider>
       <main aria-label="Interactive portfolio terminal">
-        <Terminal />
+        <Terminal initialPath={initialPath} onNavigate={updatePageMetadata} />
       </main>
     </AppThemeProvider>
   );

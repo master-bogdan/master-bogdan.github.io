@@ -6,7 +6,7 @@
 2. `main.tsx` loads the local variable font and global reset.
 3. `AppThemeProvider` supplies the MUI theme.
 4. `App` renders the terminal.
-5. The boot sequence runs, then the banner, quick commands, help output, and focused prompt appear.
+5. On the homepage, the boot sequence runs before help and the focused prompt appear. Direct content URLs already contain the terminal and selected output; React hydrates them without boot and starts the typewriter animation.
 
 ## Command Execution
 
@@ -18,7 +18,7 @@ keyboard or quick command
   -> TypewriterOutput
 ```
 
-Input is trimmed and split into a lowercase command name plus arguments. Unknown commands return the preserved error. `clear` removes the current output and restores help after the preserved delay. Selecting a blog title executes `blog <slug>` directly through the terminal command context.
+Input is trimmed and split into a lowercase command name plus arguments. Unknown commands return the preserved error. `clear` removes the current output and restores help after the preserved delay. Selecting an internal content link executes its command in the existing terminal and updates browser history. Ctrl/Cmd-click, downloads, and external links retain native browser behavior. Back and Forward restore and animate output, and route metadata follows the selected page.
 
 ## Blog Pipeline
 
@@ -32,4 +32,4 @@ Input is trimmed and split into a lowercase command name plus arguments. Unknown
 
 ## Production
 
-`npm run build` type-checks first, validates the deployment base path and all regular Markdown post files in Vite's build lifecycle, and writes static files to `build/`. `npm run preview` serves that output for local verification.
+`npm run build` type-checks first, validates the deployment base path and all regular Markdown post files in Vite's build lifecycle, and writes client assets to `build/`. The prerender step then renders public terminal views to nested HTML pages, adds route-specific metadata, and generates the sitemap. `npm run preview` serves that output for local verification.

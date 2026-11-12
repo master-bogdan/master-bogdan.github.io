@@ -1,1 +1,1 @@
-export type { Command, CommandContext, CommandHandler, CommandOutput } from './command';
+export type { Command, CommandHandler, CommandOutput } from './command';

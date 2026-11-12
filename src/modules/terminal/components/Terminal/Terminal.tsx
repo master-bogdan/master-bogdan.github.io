@@ -1,6 +1,9 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import type { ReactElement } from 'react';
+import type { MouseEvent, ReactElement } from 'react';
+
+import { appConfig } from '@/config';
+import { routeCommand } from '@/modules/navigation';
 
 import { useTerminal } from '../../hooks';
 import { Banner } from '../Banner';
@@ -10,12 +13,44 @@ import { QuickCommands } from '../QuickCommands';
 import { TypewriterOutput } from '../TypewriterOutput';
 import { terminalStyles } from './styles';
 
-export function Terminal(): ReactElement {
+type TerminalProps = {
+  readonly initialPath?: string;
+  readonly onNavigate?: (pathname: string) => void;
+};
+
+export function Terminal({
+  initialPath = appConfig.basePath,
+  onNavigate,
+}: TerminalProps): ReactElement {
   const { completeBoot, currentOutput, executeCommand, isBooting, outputRef, visibleCommands } =
-    useTerminal();
+    useTerminal(initialPath, onNavigate);
+
+  const handleLinkClick = (event: MouseEvent<HTMLElement>): void => {
+    const isPlainClick =
+      event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+    if (!isPlainClick || event.defaultPrevented || !(event.target instanceof Element)) {
+      return;
+    }
+    const anchor = event.target.closest('a[href]');
+    if (
+      !(anchor instanceof HTMLAnchorElement) ||
+      anchor.hasAttribute('download') ||
+      anchor.target === '_blank'
+    ) {
+      return;
+    }
+    const url = new URL(anchor.href);
+    const command = routeCommand(url.pathname);
+    const isInternalContent =
+      url.origin === window.location.origin && command !== null && !url.hash && !url.search;
+    if (isInternalContent && command) {
+      event.preventDefault();
+      executeCommand(command);
+    }
+  };
 
   return (
-    <Box sx={terminalStyles.viewport}>
+    <Box sx={terminalStyles.viewport} onClick={handleLinkClick}>
       <Container maxWidth={false} sx={terminalStyles.container}>
         {!isBooting ? (
           <Box sx={terminalStyles.header}>
@@ -35,11 +70,7 @@ export function Terminal(): ReactElement {
         >
           {isBooting ? <BootSequence onComplete={completeBoot} /> : null}
           {currentOutput ? (
-            currentOutput.animate ? (
-              <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
-            ) : (
-              currentOutput.output
-            )
+            <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
           ) : null}
         </Box>
         {!isBooting ? (

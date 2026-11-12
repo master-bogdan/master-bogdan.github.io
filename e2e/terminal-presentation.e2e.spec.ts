@@ -17,7 +17,7 @@ test('centers a bounded desktop panel and shows when the prompt has focus', asyn
 
   const form = page.locator('form');
   await expect(form).toHaveCSS('border-top-color', 'rgb(0, 255, 0)');
-  await page.getByRole('button', { name: 'blog', exact: true }).focus();
+  await page.getByRole('link', { name: 'blog', exact: true }).focus();
   await expect(input).not.toBeFocused();
   await expect(form).toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
   await input.click();
@@ -50,7 +50,7 @@ test('selects readable mobile and tablet banners when resized', async ({ page })
 test('keeps the complete tablet banner comfortably inside its frame', async ({ page }) => {
   await page.goto('banner-tablet.svg');
   await expect(
-    page.locator('text').filter({ hasText: 'Node.js · Go · Kubernetes · AWS' }),
+    page.locator('text').filter({ hasText: 'Building software products, cloud platforms,' }),
   ).toBeVisible();
   await expect(page.locator('#penguin')).toBeVisible();
   const margins = await page.locator('svg').evaluate((svg) => {

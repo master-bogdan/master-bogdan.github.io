@@ -21,7 +21,7 @@
 - Register every command in `commandRegistry`.
 - Preserve visible and hidden command names unless intentionally changing the product contract.
 - Keep command output functions small and deterministic where possible.
-- Use `CommandContext` for command-to-command interaction.
+- Use real anchors for public content links. The registry supplies validated permalinks, and the terminal owns same-origin navigation and browser history.
 
 ## Blog
 

@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import { appConfig, profile } from '@/config';
+
 import type { CommandHandler } from '../types';
 import { whoamiStyles } from './whoamiStyles';
 
@@ -12,13 +14,14 @@ const expertiseSections = [
     topics: ['Architecture', 'Performance', 'Scalability', 'Production reliability'],
   },
   {
-    title: '[ BACKEND & PLATFORM ]',
+    title: '[ SOFTWARE & PLATFORM ENGINEERING ]',
     description:
-      'I build backend services and operate cloud infrastructure, from event-driven integrations and databases to Kubernetes deployments, CI/CD, and observability.',
+      'I build applications and backend services and operate cloud infrastructure. My platform engineering and DevOps work covers Kubernetes deployments, CI/CD, and observability.',
     topics: [
       'TypeScript',
       'Node.js',
       'Go',
+      'React',
       'AWS',
       'Kubernetes',
       'PostgreSQL',
@@ -32,7 +35,7 @@ const expertiseSections = [
   {
     title: '[ AGENTIC AI WORKFLOWS ]',
     description:
-      'I introduce agentic AI workflows for development, code reviews, testing, and onboarding, and share these practices with the team.',
+      'I build agentic AI workflows and tooling, including local-model integrations, custom MCP tools, web search, and repository knowledge retrieval. I also bring AI-assisted development, reviews, testing, and onboarding practices to engineering teams.',
     topics: [
       'AI coding agents',
       'Repository instructions',
@@ -40,14 +43,11 @@ const expertiseSections = [
       'MCP integrations',
     ],
   },
-  {
-    title: '[ CERTIFICATIONS ]',
-    description: 'CNCF / The Linux Foundation',
-    topics: [
-      'Certified Kubernetes Administrator (CKA)',
-      'Certified Kubernetes Application Developer (CKAD)',
-    ],
-  },
+] as const;
+
+const certifications = [
+  { image: 'cka.svg', title: 'Certified Kubernetes Administrator (CKA)' },
+  { image: 'ckad.svg', title: 'Certified Kubernetes Application Developer (CKAD)' },
 ] as const;
 
 const impactHighlights = [
@@ -75,14 +75,14 @@ export const whoamiCommand: CommandHandler = () => {
         <Typography component="h2" sx={whoamiStyles.name}>
           Bogdan Shchavinskyi
         </Typography>
-        <Typography sx={whoamiStyles.role}>Tech Lead / Senior Software Engineer</Typography>
+        <Typography sx={whoamiStyles.role}>{profile.role}</Typography>
         <Typography sx={whoamiStyles.summary}>
-          8+ years building backend systems and running cloud infrastructure, focused on
-          architecture, performance, scalability, and production reliability.
+          8+ years building software products and cloud platforms, focused on architecture,
+          performance, scalability, and production reliability.
         </Typography>
         <Typography sx={whoamiStyles.paragraph}>
-          This is where I share projects, technical notes, and lessons from building and running
-          software.
+          I work end to end, from product requirements and architecture through implementation,
+          delivery, and operation.
         </Typography>
       </Box>
 
@@ -101,6 +101,28 @@ export const whoamiCommand: CommandHandler = () => {
           </Box>
         </Box>
       ))}
+
+      <Box component="section" sx={whoamiStyles.section}>
+        <Typography component="h3" sx={whoamiStyles.sectionTitle}>
+          [ CERTIFICATIONS ]
+        </Typography>
+        <Typography sx={whoamiStyles.paragraph}>CNCF / The Linux Foundation</Typography>
+        <Box sx={whoamiStyles.certifications}>
+          {certifications.map(({ image, title }) => (
+            <Box component="figure" key={image} sx={whoamiStyles.certification}>
+              <Box
+                component="img"
+                src={`${appConfig.basePath}certifications/${image}`}
+                alt={title}
+                width={96}
+                height={96}
+                sx={whoamiStyles.badge}
+              />
+              <Box component="figcaption">{title}</Box>
+            </Box>
+          ))}
+        </Box>
+      </Box>
 
       <Box component="section" sx={whoamiStyles.section}>
         <Typography component="h3" sx={whoamiStyles.sectionTitle}>

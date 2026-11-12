@@ -18,8 +18,8 @@ for (const viewport of [
     await page.clock.runFor(40_000);
 
     const fixedElements = [
-      page.getByRole('img'),
-      page.getByRole('button', { name: 'blog', exact: true }),
+      page.getByRole('img', { name: /^Bogdan Shchavinskyi/ }),
+      page.getByRole('link', { name: 'blog', exact: true }),
       page.getByText('$ whoami', { exact: true }),
       input,
     ];
@@ -55,9 +55,9 @@ for (const viewport of [
 
     await input.fill('blog ai-slop-era');
     await input.press('Enter');
-    await expect(output.getByText(/Keep the garbage out of your project/)).toBeVisible({
-      timeout: 1000,
-    });
+    await page.clock.runFor(3000);
+    await expect(output.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(output.getByText(/Keep the garbage out of your project/)).toHaveCount(0);
     await expect.poll(() => output.evaluate((element) => element.scrollTop)).toBe(0);
     await expect(input).toBeFocused();
   });

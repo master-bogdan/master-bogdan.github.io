@@ -20,7 +20,9 @@ Node must be in the supported 24.x range and npm must be 11.x.
 4. `src/modules/terminal/hooks/useTerminal.ts`
 5. `src/modules/terminal/commands/commandRegistry.tsx`
 6. `src/modules/blog/blogPosts.ts`
-7. `vite.config.ts`
+7. `src/modules/navigation/routes.ts`
+8. `scripts/prerender.mjs`
+9. `vite.config.ts`
 
 ## Safe First Changes
 
@@ -30,11 +32,11 @@ Node must be in the supported 24.x range and npm must be 11.x.
 
 ## Common Gotchas
 
-- The production URL has a non-root base path by default; overrides must be root-relative URL paths.
+- The production base path defaults to `/`; overrides must be root-relative URL paths.
 - Blog front matter is a strict build contract, not optional metadata.
 - Blog posts must be regular files with URL-safe slugs; symbolic links and YAML aliases fail the build.
 - Hidden commands are preserved product behavior.
-- Command output is animated, so tests must account for timers.
+- All command output animates at 7 ms per character. Public routes skip boot but still animate after hydration; browser tests can advance the clock to verify complete content. Tests without JavaScript verify the full static output.
 - Direct dependency versions are intentionally exact.
 
 ## Before Handoff
