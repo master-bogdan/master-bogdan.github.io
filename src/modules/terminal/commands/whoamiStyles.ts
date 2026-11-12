@@ -74,6 +74,15 @@ export const whoamiStyles = {
     px: 1,
     py: 0.35,
   },
+  certifications: { display: 'flex', flexWrap: 'wrap', gap: 3 },
+  certification: {
+    ...terminalText,
+    m: 0,
+    maxWidth: '220px',
+    fontSize: '12px',
+    color: ThemeColors.WHITE,
+  },
+  badge: { display: 'block', mb: 1 },
   impactGrid: {
     display: 'grid',
     gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, minmax(0, 1fr))' },

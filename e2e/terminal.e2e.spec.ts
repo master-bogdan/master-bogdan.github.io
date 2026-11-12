@@ -32,7 +32,7 @@ test('boots, accepts keyboard commands, and opens a Markdown post', async ({ pag
 
   await expect(
     page.getByAltText(
-      'Bogdan Shchavinskyi — Senior Software Engineer & Tech Lead — Building software products, cloud platforms, and agentic AI workflows—from architecture to production.',
+      'Bogdan Shchavinskyi — Senior Software Engineer & Tech Lead — Building software products, cloud platforms, and agentic AI workflows — from architecture to production.',
     ),
   ).toHaveAttribute('src', new URL('banner.svg', siteUrl).pathname);
 

@@ -66,15 +66,12 @@ test('includes all content URLs in the generated sitemap and serves certificatio
     expect(xml).toContain(`<loc>https://master-bogdan.github.io/${pathname}</loc>`);
   }
   await page.goto('resume/');
-  for (const name of [
-    'Certified Kubernetes Administrator (CKA)',
-    'Certified Kubernetes Application Developer (CKAD)',
-  ]) {
-    const image = page.getByRole('img', { name, exact: true });
-    await expect(image).toBeVisible();
-    const src = await image.getAttribute('src');
-    expect(src).toContain('/certifications/');
-    const response = await request.get(src!);
+  await expect(page.getByRole('link', { name: '[Download PDF]' })).toBeVisible();
+  await expect(page.getByRole('link', { name: '[View LinkedIn profile]' })).toBeVisible();
+  await expect(page.getByText('Certifications', { exact: true })).toHaveCount(0);
+  for (const filename of ['cka.svg', 'ckad.svg']) {
+    const imageUrl = new URL(`../certifications/${filename}`, page.url());
+    const response = await request.get(imageUrl.href);
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('image/svg+xml');
   }

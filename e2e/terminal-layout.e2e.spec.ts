@@ -18,7 +18,7 @@ for (const viewport of [
     await page.clock.runFor(40_000);
 
     const fixedElements = [
-      page.getByRole('img'),
+      page.getByRole('img', { name: /^Bogdan Shchavinskyi/ }),
       page.getByRole('link', { name: 'blog', exact: true }),
       page.getByText('$ whoami', { exact: true }),
       input,

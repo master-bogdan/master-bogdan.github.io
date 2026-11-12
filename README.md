@@ -41,7 +41,7 @@ For the standard repository URL, use `npm run validate`. The browser tests use t
 
 ### Public CV
 
-The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command and `/resume/` show a short professional presentation with the PDF download, LinkedIn, main technologies, selected impact, and certification artwork. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
+The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command and `/resume/` focus on the PDF download and LinkedIn. The `whoami` command presents the engineering background, technologies, selected impact, and certification artwork. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
 
 When replacing the CV, keep the public filename stable and update `whoami`, banner text, and SEO/profile metadata in `index.html` to match. Run `npm run assets:generate` after banner changes so the social preview stays current, then run `npm run validate`.
 
@@ -68,7 +68,7 @@ When changing the public domain or deployment path, update `profile.url` in `src
 The terminal stays the interface at every URL:
 
 - `/blog/` lists posts; `/blog/<slug>/` opens an article.
-- `/resume/` shows a short introduction with the CV download.
+- `/resume/` provides the CV download and LinkedIn profile.
 - `/projects/` lists featured work; `/projects/<slug>/` opens a project.
 
 Links and corresponding commands update the URL without reloading the terminal. Browser Back and Forward restore earlier views. Direct visits skip boot and immediately show the requested content. The homepage keeps its boot sequence and hidden commands.

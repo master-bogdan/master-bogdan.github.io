@@ -9,7 +9,7 @@ describe('Banner', () => {
 
     expect(
       screen.getByRole('img', {
-        name: 'Bogdan Shchavinskyi — Senior Software Engineer & Tech Lead — Building software products, cloud platforms, and agentic AI workflows—from architecture to production.',
+        name: 'Bogdan Shchavinskyi — Senior Software Engineer & Tech Lead — Building software products, cloud platforms, and agentic AI workflows — from architecture to production.',
       }),
     ).toHaveAttribute('src', '/banner.svg');
   });

@@ -25,7 +25,7 @@ const overviewContent: Readonly<Record<string, PageContent>> = {
   resume: {
     heading: 'Resume',
     description:
-      'Meet Bogdan Shchavinskyi: Senior Software Engineer & Tech Lead working across software products, cloud platforms, and agentic AI workflows.',
+      "Download Bogdan Shchavinskyi's CV or view his professional experience on LinkedIn. Senior Software Engineer & Tech Lead.",
     schemaType: 'Person',
   },
   blog: {

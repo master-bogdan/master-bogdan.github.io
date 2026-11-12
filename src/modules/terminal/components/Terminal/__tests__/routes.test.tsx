@@ -45,16 +45,16 @@ describe('Terminal public routes', () => {
     expect(screen.getByRole('heading', { name: 'Neovim Practice' })).toBeInTheDocument();
   });
 
-  it('shows a short resume, local certification images, and a stable PDF download', () => {
+  it('keeps the resume focused on the CV and LinkedIn links', () => {
     render(<Terminal initialPath="/resume/" />);
     expect(screen.getByRole('heading', { name: 'Bogdan Shchavinskyi' })).toBeInTheDocument();
-    expect(screen.getByText('Platform engineering & DevOps:')).toBeInTheDocument();
-    expect(
-      screen.getByRole('img', { name: 'Certified Kubernetes Administrator (CKA)' }),
-    ).toHaveAttribute('src', '/certifications/cka.svg');
-    expect(
-      screen.getByRole('img', { name: 'Certified Kubernetes Application Developer (CKAD)' }),
-    ).toHaveAttribute('src', '/certifications/ckad.svg');
+    expect(screen.queryByText('What I work on')).not.toBeInTheDocument();
+    expect(screen.queryByText('Main technologies')).not.toBeInTheDocument();
+    expect(screen.queryByText('Certifications')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '[View LinkedIn profile]' })).toHaveAttribute(
+      'href',
+      'https://www.linkedin.com/in/b-shchavinskyi-fullstack',
+    );
     expect(screen.getByRole('link', { name: '[Download PDF]' })).toHaveAttribute(
       'download',
       'Bogdan_Shchavinskyi_CV.pdf',

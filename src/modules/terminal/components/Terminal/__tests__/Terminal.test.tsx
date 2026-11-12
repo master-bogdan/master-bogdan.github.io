@@ -68,6 +68,13 @@ describe('Terminal', () => {
     expect(screen.getByText('~8 GB → 700 MB')).toBeInTheDocument();
     expect(screen.getByText(/application I took over and later led/)).toBeInTheDocument();
     expect(screen.getByText('MCP integrations')).toBeInTheDocument();
+    expect(screen.getByText('React')).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: 'Certified Kubernetes Administrator (CKA)' }),
+    ).toHaveAttribute('src', '/certifications/cka.svg');
+    expect(
+      screen.getByRole('img', { name: 'Certified Kubernetes Application Developer (CKAD)' }),
+    ).toHaveAttribute('src', '/certifications/ckad.svg');
     expect(screen.getByText('Certified Kubernetes Administrator (CKA)')).toBeInTheDocument();
     expect(
       screen.getByText('Certified Kubernetes Application Developer (CKAD)'),
