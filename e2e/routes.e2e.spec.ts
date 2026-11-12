@@ -1,13 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+import { collectBrowserErrors } from './utils/collect-browser-errors';
+
 test('keeps direct links, commands, and browser history inside one terminal', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') {
-      errors.push(message.text());
-    }
-  });
+  const errors = collectBrowserErrors(page);
   await page.clock.install();
   const response = await page.goto('blog/welcome/');
   expect(await response?.text()).toContain('Happy exploring!');
@@ -99,13 +95,7 @@ test('reveals static article content when the client bundle fails to load', asyn
 });
 
 test('hydrates explicit directory index URLs as the requested article', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') {
-      errors.push(message.text());
-    }
-  });
+  const errors = collectBrowserErrors(page);
   await page.clock.install();
   const response = await page.goto('blog/welcome/index.html');
   expect(response?.status()).toBe(200);
