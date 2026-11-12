@@ -15,7 +15,7 @@ Node must be in the supported 24.x range and npm must be 11.x.
 ## Reading Order
 
 1. `README.md`
-2. `CONTEXT.md`
+2. `GLOSSARY.md`
 3. `src/app/App.tsx`
 4. `src/modules/terminal/hooks/useTerminal.ts`
 5. `src/modules/terminal/commands/commandRegistry.tsx`

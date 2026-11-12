@@ -4,7 +4,7 @@ This package is a static Vite/React terminal portfolio. Preserve command names, 
 
 ## Start Here
 
-1. Read `README.md` and `CONTEXT.md`.
+1. Read `README.md` and `GLOSSARY.md`.
 2. Read `docs/architecture.md` before moving boundaries.
 3. Read `src/modules/terminal/commands/commandRegistry.tsx` before changing commands.
 4. Read `src/modules/terminal/hooks/useTerminal.ts` before changing interaction state.
@@ -38,3 +38,17 @@ Run the narrowest relevant test during development, then finish with:
 ```bash
 npm run validate
 ```
+
+## Agent skills
+
+### Issue tracker
+
+Track issues in GitHub Issues. Before issue operations, read `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the five canonical triage labels. Before applying triage labels, read `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Use a single-context glossary and ADR layout. Before domain exploration, read `docs/agents/domain.md`.
