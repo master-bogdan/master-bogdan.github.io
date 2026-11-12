@@ -8,18 +8,18 @@ describe('TypewriterOutput', () => {
     vi.useRealTimers();
   });
 
-  it('reveals one character every 10 ms by default', async () => {
+  it('reveals one character every 7 ms by default', async () => {
     vi.useFakeTimers();
     render(
       <TypewriterOutput>
         <span>Hello</span>
       </TypewriterOutput>,
     );
-    await act(() => vi.advanceTimersByTimeAsync(9));
+    await act(() => vi.advanceTimersByTimeAsync(6));
     expect(screen.queryByText('H')).not.toBeInTheDocument();
     await act(() => vi.advanceTimersByTimeAsync(1));
     expect(screen.getByText('H')).toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(40));
+    await act(() => vi.advanceTimersByTimeAsync(28));
     expect(screen.getByText('Hello')).toBeInTheDocument();
   });
 

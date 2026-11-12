@@ -71,7 +71,7 @@ The terminal stays the interface at every URL:
 - `/resume/` provides the CV download and LinkedIn profile.
 - `/projects/` lists featured work; `/projects/<slug>/` opens a project.
 
-Links and corresponding commands update the URL without reloading the terminal. Browser Back and Forward restore earlier views. All command output uses the same typewriter animation at 10 ms per character, including direct visits and restored routes. Direct visits skip boot and animate the requested content. The homepage keeps its boot sequence and hidden commands.
+Links and corresponding commands update the URL without reloading the terminal. Browser Back and Forward restore earlier views. All command output uses the same typewriter animation at 7 ms per character, including direct visits and restored routes. Direct visits skip boot and animate the requested content. The homepage keeps its boot sequence and hidden commands.
 
 After Vite builds, `scripts/prerender.mjs` renders the same React terminal into an `index.html` for each content URL, plus `sitemap.xml`. GitHub Pages therefore serves deep links and refreshes directly. Pages include their content and metadata before JavaScript runs; hydration starts the typewriter animation and adds keyboard commands and in-terminal navigation. Complete static content stays readable without JavaScript; a JavaScript-only pending style prevents a full-text flash before animation begins. Preview base paths are kept separate from `profile.url`, which always describes the actual production address.
 
