@@ -117,13 +117,17 @@ export const getVisibleCommands = (): readonly string[] => {
     .map((command) => command.name);
 };
 
+const getRegisteredCommand = (name: string): Command | undefined => {
+  return Object.hasOwn(commandRegistry, name) ? commandRegistry[name] : undefined;
+};
+
 export const commandHref = (input: string): string | undefined => {
   const [name, ...args] = input.trim().toLowerCase().split(/\s+/);
-  return commandRegistry[name]?.href?.(args);
+  return getRegisteredCommand(name)?.href?.(args);
 };
 
 export const commandOutput = (input: string): ReactNode => {
   const [name, ...args] = input.trim().toLowerCase().split(/\s+/);
-  const command = commandRegistry[name];
+  const command = getRegisteredCommand(name);
   return command ? command.execute(args) : unknownCommand(name);
 };

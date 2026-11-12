@@ -2,18 +2,39 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 import { log } from 'node:console';
+import { createHash } from 'node:crypto';
 
 import { createServer } from 'vite';
 
 const projectDirectory = fileURLToPath(new URL('../', import.meta.url));
 const buildDirectory = path.join(projectDirectory, 'build');
-const template = await readFile(path.join(buildDirectory, 'index.html'), 'utf8');
+const builtHtml = await readFile(path.join(buildDirectory, 'index.html'), 'utf8');
 const escapeHtml = (text) =>
   text.replace(
     /[&<>"']/g,
     (character) =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character],
   );
+
+const inlineScriptHashes = [...builtHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+  .map(([, script]) => `'sha256-${createHash('sha256').update(script).digest('base64')}'`)
+  .join(' ');
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' ${inlineScriptHashes}`,
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
+  "img-src 'self' https:",
+  "object-src 'none'",
+  "frame-src 'none'",
+  "base-uri 'self'",
+  "form-action 'none'",
+].join('; ');
+const template = builtHtml.replace(
+  /<meta charset="UTF-8"\s*\/?>/,
+  (charset) =>
+    `${charset}\n<meta http-equiv="Content-Security-Policy" content="${escapeHtml(contentSecurityPolicy)}">\n<meta name="referrer" content="strict-origin-when-cross-origin">`,
+);
 
 const renderPage = ({ metadata, html }) => {
   let page = template.replace(
@@ -57,7 +78,7 @@ const renderPage = ({ metadata, html }) => {
 const server = await createServer({
   root: projectDirectory,
   mode: 'production',
-  server: { middlewareMode: true, watch: null },
+  server: { middlewareMode: true, watch: null, ws: false },
   appType: 'custom',
 });
 try {

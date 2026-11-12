@@ -19,6 +19,7 @@ describe('Public page metadata', () => {
     expect(metadata.description.length).toBeGreaterThan(20);
     expect(JSON.parse(metadata.structuredData)['@type']).toBe(schemaType);
     expect(metadata.noindex).toBe(false);
+    expect(pageMetadata(`${pathname}index.html`)).toEqual(metadata);
   });
   it('uses article metadata for authored posts and excludes missing content from indexing', () => {
     expect(pageMetadata('/blog/ai-slop-era/').ogType).toBe('article');
