@@ -16,7 +16,7 @@ const escapeHtml = (text) =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character],
   );
 
-const inlineScriptHashes = [...builtHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+const inlineScriptHashes = [...builtHtml.matchAll(/<script>([\s\S]*?)<\/script>/gi)]
   .map(([, script]) => `'sha256-${createHash('sha256').update(script).digest('base64')}'`)
   .join(' ');
 const contentSecurityPolicy = [
