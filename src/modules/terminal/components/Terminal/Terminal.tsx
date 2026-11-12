@@ -70,11 +70,7 @@ export function Terminal({
         >
           {isBooting ? <BootSequence onComplete={completeBoot} /> : null}
           {currentOutput ? (
-            currentOutput.animate ? (
-              <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
-            ) : (
-              currentOutput.output
-            )
+            <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
           ) : null}
         </Box>
         {!isBooting ? (

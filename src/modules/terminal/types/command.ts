@@ -8,12 +8,10 @@ export type Command = {
   readonly execute: CommandHandler;
   readonly href?: (args: readonly string[]) => string | undefined;
   readonly hidden?: boolean;
-  readonly animateOutput?: boolean;
 };
 
 export type CommandOutput = {
   readonly id: number;
   readonly command: string;
   readonly output: ReactNode;
-  readonly animate: boolean;
 };

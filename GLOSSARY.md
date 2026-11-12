@@ -40,7 +40,7 @@
 - Boot and typewriter sequences clean up their timers.
 - Desktop uses a centered, bounded panel; mobile and short windows use the available height.
 - Only command output scrolls; the banner, quick commands, command label, and input stay fixed.
-- New output starts at the top. Blog lists and posts render immediately without typewriter animation.
+- New output starts at the top. All command output uses typewriter animation, including public routes and browser history navigation.
 - Blog metadata errors and duplicate slugs stop the build.
 - Content is local; the production site needs no application server.
 

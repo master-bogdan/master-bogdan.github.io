@@ -114,7 +114,7 @@ describe('Terminal', () => {
     expect(screen.getByText(/Post 'missing' not found/)).toBeInTheDocument();
   });
 
-  it('renders a complete long blog post without advancing typing timers', async () => {
+  it('animates a long blog post and eventually reveals its complete content', async () => {
     const input = await bootTerminal();
     fireEvent.change(input, { target: { value: 'BLOG ai-slop-era' } });
     const form = input.closest('form');
@@ -124,6 +124,9 @@ describe('Terminal', () => {
     }
 
     fireEvent.submit(form);
+
+    expect(screen.queryByText(/Keep the garbage out of your project/)).not.toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(100_000));
 
     expect(screen.getByText(/Keep the garbage out of your project/)).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);

@@ -4,7 +4,6 @@ import type { CommandOutput } from '../types';
 
 type OutputOptions = {
   readonly delayMs?: number;
-  readonly animate?: boolean;
 };
 
 type TerminalOutputController = {
@@ -53,8 +52,8 @@ export const useTerminalOutput = (
   };
 
   const showOutput = (command: string, output: ReactNode, options: OutputOptions = {}): void => {
-    const { delayMs = 0, animate = true } = options;
-    const commandOutput = { id: nextOutputIdRef.current, command, output, animate };
+    const { delayMs = 0 } = options;
+    const commandOutput = { id: nextOutputIdRef.current, command, output };
     nextOutputIdRef.current += 1;
 
     if (delayMs === 0) {

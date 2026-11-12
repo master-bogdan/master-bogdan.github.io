@@ -8,10 +8,16 @@ test('keeps direct links, commands, and browser history inside one terminal', as
       errors.push(message.text());
     }
   });
-  await page.goto('blog/welcome/');
+  await page.clock.install();
+  const response = await page.goto('blog/welcome/');
+  expect(await response?.text()).toContain('Happy exploring!');
   const siteUrl = new URL('../../', page.url());
   const input = page.getByRole('textbox', { name: 'Terminal command' });
   await expect(input).toBeFocused();
+  const output = page.getByRole('region', { name: 'Command output' });
+  await expect(output.getByText('Happy exploring!')).toHaveCount(0);
+  await page.clock.runFor(8000);
+  await expect(output.getByText('Happy exploring!')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
   await expect(page.getByText('Initializing system...')).toHaveCount(0);
   await page.evaluate(() => {
@@ -21,8 +27,10 @@ test('keeps direct links, commands, and browser history inside one terminal', as
   const initialBounds = await panel.boundingBox();
 
   await page.getByRole('link', { name: 'projects', exact: true }).click();
+  await page.clock.runFor(5000);
   await expect(page).toHaveURL(new URL('projects/', siteUrl).href);
   await page.getByRole('link', { name: 'Neovim Practice', exact: true }).click();
+  await page.clock.runFor(1000);
   await expect(page).toHaveURL(new URL('projects/neovim-practice/', siteUrl).href);
   await expect(page).toHaveTitle('Neovim Practice | Bogdan Shchavinskyi');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -33,26 +41,33 @@ test('keeps direct links, commands, and browser history inside one terminal', as
   expect(await panel.boundingBox()).toEqual(initialBounds);
 
   await page.goBack();
+  await page.clock.runFor(1000);
   await expect(page.getByRole('heading', { name: 'Featured Projects:' })).toBeVisible();
   await page.goForward();
+  await page.clock.runFor(1000);
   await expect(page.getByRole('heading', { name: 'Neovim Practice', exact: true })).toBeVisible();
   await page.reload();
+  await page.clock.runFor(1000);
   await expect(page.getByRole('heading', { name: 'Neovim Practice', exact: true })).toBeVisible();
   await expect(input).toBeFocused();
 
   await input.fill('BLOG ai-slop-era');
   await input.press('Enter');
   await expect(page).toHaveURL(new URL('blog/ai-slop-era/', siteUrl).href);
-  await expect(page.getByText('Keep the garbage out of your project')).toBeVisible();
+  await page.clock.runFor(1000);
+  await expect(output.getByText('Keep the garbage out of your project')).toHaveCount(0);
   await expect(input).toBeFocused();
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
 
   await input.fill('resume');
   await input.press('Enter');
+  await page.clock.runFor(3000);
   await expect(page).toHaveURL(new URL('resume/', siteUrl).href);
   await expect(page.getByRole('link', { name: '[Download PDF]' })).toBeVisible();
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website');
   await expect(page).toHaveTitle('Resume | Bogdan Shchavinskyi');
+  await page.clock.runFor(5000);
+  await expect(output.getByText('Keep the garbage out of your project')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

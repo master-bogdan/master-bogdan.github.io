@@ -8,6 +8,21 @@ describe('TypewriterOutput', () => {
     vi.useRealTimers();
   });
 
+  it('reveals one character every 10 ms by default', async () => {
+    vi.useFakeTimers();
+    render(
+      <TypewriterOutput>
+        <span>Hello</span>
+      </TypewriterOutput>,
+    );
+    await act(() => vi.advanceTimersByTimeAsync(9));
+    expect(screen.queryByText('H')).not.toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(1));
+    expect(screen.getByText('H')).toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(40));
+    expect(screen.getByText('Hello')).toBeInTheDocument();
+  });
+
   it('animates static sibling elements without missing-key warnings', async () => {
     vi.useFakeTimers();
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);

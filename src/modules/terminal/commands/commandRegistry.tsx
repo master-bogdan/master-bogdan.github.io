@@ -31,14 +31,12 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
     name: 'projects',
     description: 'List featured projects',
     execute: projectsCommand,
-    animateOutput: false,
     href: (args) =>
       !args[0] || getProject(args[0]) ? contentHref('projects', args[0]) : undefined,
   },
   blog: {
     name: 'blog',
     description: 'Read blog posts',
-    animateOutput: false,
     execute: blogCommand,
     href: (args) => (!args[0] || getBlogPost(args[0]) ? contentHref('blog', args[0]) : undefined),
   },
@@ -51,7 +49,6 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
     name: 'resume',
     description: 'Download my resume',
     execute: resumeCommand,
-    animateOutput: false,
     href: () => contentHref('resume'),
   },
   clear: {

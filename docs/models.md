@@ -8,7 +8,6 @@ Command
   description: string
   execute(args): ReactNode
   href?(args): string | undefined
-  animateOutput?: boolean
   hidden?: boolean
 ```
 
@@ -21,7 +20,6 @@ CommandOutput
   id: number
   command: string
   output: ReactNode
-  animate: boolean
 ```
 
 The monotonically increasing `id` remounts the typewriter for repeated commands.

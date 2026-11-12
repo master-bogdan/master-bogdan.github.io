@@ -4,7 +4,7 @@ import { appConfig } from '@/config';
 import { routeCommand } from '@/modules/navigation';
 
 import { TerminalTimings } from '../constants';
-import { commandHref, commandOutput, commandRegistry, getVisibleCommands } from '../commands';
+import { commandHref, commandOutput, getVisibleCommands } from '../commands';
 import type { CommandOutput } from '../types';
 import { useTerminalOutput } from './useTerminalOutput';
 
@@ -35,7 +35,7 @@ export const useTerminal = (
   const [isBooting, setIsBooting] = useState(initialCommand === null);
   const { clearOutput, currentOutput, outputRef, showOutput } = useTerminalOutput(() =>
     initialCommand
-      ? { id: 0, command: initialCommand, output: commandOutput(initialCommand), animate: false }
+      ? { id: 0, command: initialCommand, output: commandOutput(initialCommand) }
       : null,
   );
 
@@ -43,7 +43,7 @@ export const useTerminal = (
     const command =
       savedHistoryCommand(event.state) ?? routeCommand(window.location.pathname) ?? HelpCommandName;
     setIsBooting(false);
-    showOutput(command, commandOutput(command), { animate: false });
+    showOutput(command, commandOutput(command));
     onNavigate?.(window.location.pathname);
   });
 
@@ -75,9 +75,7 @@ export const useTerminal = (
       return;
     }
 
-    showOutput(input, commandOutput(input), {
-      animate: commandRegistry[name]?.animateOutput ?? true,
-    });
+    showOutput(input, commandOutput(input));
   };
 
   const completeBoot = (): void => {

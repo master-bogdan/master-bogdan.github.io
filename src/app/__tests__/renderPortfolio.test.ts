@@ -7,6 +7,8 @@ describe('Static portfolio generation', () => {
     const post = pages.find((page) => page.relativePath === 'blog/welcome/');
     const project = pages.find((page) => page.relativePath === 'projects/local-ai-lab/');
     expect(post?.html).toContain('Why a Terminal?');
+    expect(post?.html).toContain('Happy exploring!');
+    expect(post?.html).toContain('data-typewriter-pending');
     expect(post?.html).toContain('aria-label="Terminal command"');
     expect(post?.html).not.toContain('Initializing system...');
     expect(post?.metadata.canonical).toBe('https://master-bogdan.github.io/blog/welcome/');
