@@ -29,7 +29,7 @@ The deployment URL is `https://master-bogdan.github.io/` once Pages is enabled a
 2. In **Settings → Pages → Build and deployment**, select **GitHub Actions** as the source.
 3. Run **Validate and deploy website** from the Actions tab, or rerun the first workflow if it ran before Pages was enabled.
 
-The workflow installs the Node version in `.nvmrc` and npm `11.17.0`, then runs formatting, lint, TypeScript, coverage, the production build, and Chromium tests. Browser tests cover the terminal, CV downloads, SEO metadata, and the no-JavaScript profile at both a test subdirectory (`/preview/`) and the configured deployment path (normally `/`). The final validation rebuilds the configured deployment path before uploading the site. Pull requests run validation only. Successful pushes to `main` publish `build/` using GitHub's Pages actions and the built-in `GITHUB_TOKEN`; no personal access token is needed.
+The workflow installs the Node version in `.nvmrc` and npm `11.17.0`, then runs a dependency security audit, formatting, lint, TypeScript, coverage, the production build, and Chromium tests. Browser tests cover the terminal, CV downloads, SEO metadata, and the no-JavaScript profile at both a test subdirectory (`/preview/`) and the configured deployment path (normally `/`). The final validation rebuilds the configured deployment path before uploading the site. Pull requests run validation only. Successful pushes to `main` publish `build/` using GitHub's Pages actions and the built-in `GITHUB_TOKEN`; no personal access token is needed.
 
 The workflow defaults to `VITE_BASE_PATH=/` for the user site. For a custom domain, configure the domain in Pages settings and keep the root base path. To test a subdirectory deployment locally:
 
@@ -73,13 +73,23 @@ The terminal stays the interface at every URL:
 
 Links and corresponding commands update the URL without reloading the terminal. Browser Back and Forward restore earlier views. All command output uses the same typewriter animation at 7 ms per character, including direct visits and restored routes. Direct visits skip boot and animate the requested content. The homepage keeps its boot sequence and hidden commands.
 
-After Vite builds, `scripts/prerender.mjs` renders the same React terminal into an `index.html` for each content URL, plus `sitemap.xml`. GitHub Pages therefore serves deep links and refreshes directly. Pages include their content and metadata before JavaScript runs; hydration starts the typewriter animation and adds keyboard commands and in-terminal navigation. Complete static content stays readable without JavaScript; a JavaScript-only pending style prevents a full-text flash before animation begins. Preview base paths are kept separate from `profile.url`, which always describes the actual production address.
+After Vite builds, `scripts/prerender.mjs` renders the same React terminal into an `index.html` for each content URL, plus `sitemap.xml`. GitHub Pages therefore serves deep links and refreshes directly. Pages include their content and metadata before JavaScript runs; hydration starts the typewriter animation and adds keyboard commands and in-terminal navigation. Complete static content stays readable without JavaScript; a JavaScript-only pending style prevents a full-text flash before animation begins and reveals the static output after three seconds if hydration fails. Explicit `index.html` URLs open the same content and retain the directory URL as their canonical address. Preview base paths are kept separate from `profile.url`, which always describes the actual production address.
 
 ### Featured projects
 
 Edit `src/modules/projects/projects.ts` to maintain project descriptions, features, technologies, examples, and curated updates. Each update records a real date and a GitHub release or commit link. Project pages build from this local content; visiting the website does not fetch GitHub data. Put local preview assets in `public/projects/`.
 
 Certification and project-image sources are recorded in [Asset sources](docs/asset-credits.md).
+
+## Security
+
+Run `npm run security:audit` to check production and development dependencies against npm advisories. CI rejects moderate or higher findings. The local `validate` command stays independent of network access. Review maintainer security advisories as well: newly published fixes may reach the advisory database later.
+
+Vite and the Vitest packages use patched, exact versions. The lockfile includes patched Zod, and a scoped override replaces minimatch 10 with `11.0.1` until the linting dependencies accept a patched version themselves. Run the full validation suite when changing or removing that override.
+
+Prerendering disables Vite's WebSocket listener and adds a Content Security Policy plus `strict-origin-when-cross-origin` referrer policy to every generated HTML page. The script policy allows local JavaScript and automatically hashes the inline boot script; inline styles remain enabled for Material UI and Emotion. Fonts may come from this site or embedded data URLs used by the banners. Images may come from this site or HTTPS sources. Objects, child frames, and form submissions are blocked. These policies apply to production output; the Vite development server retains its normal hot-reload behavior.
+
+Policies delivered through HTML cannot set response-only controls such as `frame-ancestors`, `X-Frame-Options`, or `X-Content-Type-Options`. Those require a hosting layer that supports custom response headers. Repository administrator bypass and Actions permission changes are separate from the application patches. See the [security review](docs/security-review-2026-11-12.md) for the original findings and remediation status.
 
 ## Commands
 
@@ -94,6 +104,7 @@ Certification and project-image sources are recorded in [Asset sources](docs/ass
 | `npm run test:coverage`   | Enforce 80% statements, branches, functions, and lines            |
 | `npm run test:e2e`        | Run the Chromium Playwright journey                               |
 | `npm run lint`            | Run ESLint with zero warnings                                     |
+| `npm run security:audit`  | Reject moderate or higher dependency security advisories          |
 | `npm run format:check`    | Check Prettier formatting                                         |
 | `npm run validate`        | Run every production gate                                         |
 

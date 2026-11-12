@@ -11,7 +11,7 @@ export const routeCommand = (pathname: string): string | null => {
     return null;
   }
 
-  const relativePath = pathname.slice(appConfig.basePath.length);
+  const relativePath = pathname.slice(appConfig.basePath.length).replace(/\/index\.html$/, '/');
   const match = /^(blog|projects|resume)(?:\/([a-z0-9]+(?:-[a-z0-9]+)*))?\/?$/.exec(relativePath);
 
   if (!match || (match[1] === 'resume' && match[2])) {

@@ -1,4 +1,4 @@
-import { appConfig, profile } from '@/config';
+import { profile } from '@/config';
 import { getBlogPost } from '@/modules/blog';
 import { routeCommand } from '@/modules/navigation';
 import { getProject } from '@/modules/projects';
@@ -120,9 +120,7 @@ const serializeStructuredData = (content: PageContent, canonical: string): strin
 export const pageMetadata = (pathname: string): PageMetadata => {
   const [command, slug] = routeCommand(pathname)?.split(' ') ?? [];
   const content = describePage(command, slug);
-  const relativePath = command
-    ? pathname.slice(appConfig.basePath.length).replace(/\/?$/, '/')
-    : '';
+  const relativePath = command ? `${command}/${slug ? `${slug}/` : ''}` : '';
   const canonical = new URL(relativePath, profile.url).href;
   return {
     title: command ? `${content.heading} | ${profile.name}` : `${profile.name} | ${profile.role}`,

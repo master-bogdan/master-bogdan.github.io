@@ -114,6 +114,18 @@ describe('Terminal', () => {
     expect(screen.getByText(/Post 'missing' not found/)).toBeInTheDocument();
   });
 
+  it.each(['constructor', '__proto__'])('treats %s as an unknown command', async (command) => {
+    const input = await bootTerminal();
+
+    await submitCommand(input, command);
+
+    expect(screen.getByText(`Command not found: ${command}`, { exact: false })).toBeInTheDocument();
+    expect(input).toHaveFocus();
+
+    await submitCommand(input, 'help');
+    expect(screen.getByText('Available Commands:')).toBeInTheDocument();
+  });
+
   it('animates a long blog post and eventually reveals its complete content', async () => {
     const input = await bootTerminal();
     fireEvent.change(input, { target: { value: 'BLOG ai-slop-era' } });

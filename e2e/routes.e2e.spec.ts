@@ -1,13 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+import { collectBrowserErrors } from './utils/collect-browser-errors';
+
 test('keeps direct links, commands, and browser history inside one terminal', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') {
-      errors.push(message.text());
-    }
-  });
+  const errors = collectBrowserErrors(page);
   await page.clock.install();
   const response = await page.goto('blog/welcome/');
   expect(await response?.text()).toContain('Happy exploring!');
@@ -84,4 +80,32 @@ test('opens a blog link in a separate tab with the requested content', async ({
   await expect(newTab.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Blog Posts:' })).toBeVisible();
   await newTab.close();
+});
+
+test('reveals static article content when the client bundle fails to load', async ({ page }) => {
+  await page.route('**/assets/*.js', (route) => route.abort());
+  const response = await page.goto('blog/welcome/');
+  expect(response?.status()).toBe(200);
+  const output = page.getByRole('region', { name: 'Command output' });
+  await expect(output.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible({
+    timeout: 6000,
+  });
+  await expect(output.getByText('Happy exploring!')).toBeVisible();
+  await expect(output.getByRole('link', { name: '← All posts' })).toBeVisible();
+});
+
+test('hydrates explicit directory index URLs as the requested article', async ({ page }) => {
+  const errors = collectBrowserErrors(page);
+  await page.clock.install();
+  const response = await page.goto('blog/welcome/index.html');
+  expect(response?.status()).toBe(200);
+  await page.clock.runFor(8000);
+  await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
+  await expect(page).toHaveTitle('Welcome to My Terminal | Bogdan Shchavinskyi');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    'https://master-bogdan.github.io/blog/welcome/',
+  );
+  await expect(page.getByText('Initializing system...')).toHaveCount(0);
+  expect(errors).toEqual([]);
 });

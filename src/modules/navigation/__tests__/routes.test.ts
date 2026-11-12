@@ -9,6 +9,15 @@ describe('Public terminal URLs', () => {
     expect(contentHref('projects', 'local-ai-lab')).toBe('/projects/local-ai-lab/');
   });
   it.each([
+    ['/blog/index.html', 'blog'],
+    ['/blog/welcome/index.html', 'blog welcome'],
+    ['/resume/index.html', 'resume'],
+    ['/projects/index.html', 'projects'],
+    ['/projects/local-ai-lab/index.html', 'projects local-ai-lab'],
+  ])('opens %s as the directory content', (pathname, command) => {
+    expect(routeCommand(pathname)).toBe(command);
+  });
+  it.each([
     '/',
     '/resume/file/',
     '/blog/a/b/',
