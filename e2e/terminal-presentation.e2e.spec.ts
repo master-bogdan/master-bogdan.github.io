@@ -53,7 +53,7 @@ test('keeps the complete tablet banner comfortably inside its frame', async ({ p
   await expect(
     page.locator('text').filter({ hasText: 'Building software products, cloud platforms,' }),
   ).toBeVisible();
-  await expect(page.locator('#penguin')).toBeVisible();
+  await expect(page.locator('#octopus')).toBeVisible();
   const margins = await page.locator('svg').evaluate((svg) => {
     const border = svg.querySelector<SVGRectElement>('rect[stroke]');
     if (!border) {
