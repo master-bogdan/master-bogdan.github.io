@@ -15,16 +15,16 @@ describe('Terminal public routes', () => {
   });
   afterEach(() => vi.useRealTimers());
 
-  it('animates a direct post URL and keeps commands usable', async () => {
+  it('opens a complete article immediately and restores the portfolio header for other commands', async () => {
     window.history.replaceState(null, '', '/blog/welcome/');
     render(<Terminal initialPath="/blog/welcome/" />);
-    expect(
-      screen.queryByRole('heading', { name: 'Welcome to My Terminal' }),
-    ).not.toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(10));
-    expect(screen.getByText('W')).toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(1000));
     expect(screen.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeInTheDocument();
+    expect(screen.getByText('Happy exploring!')).toBeInTheDocument();
+    expect(screen.getAllByText('Welcome to My Terminal')).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Bogdan Shchavinskyi' })).toHaveAttribute('href', '/');
+    expect(screen.queryByRole('img', { name: /^Bogdan Shchavinskyi/ })).not.toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(300));
+    expect(screen.getByText('$ blog welcome')).toBeInTheDocument();
     expect(screen.queryByText('Initializing system...')).not.toBeInTheDocument();
     const input = screen.getByRole('textbox', { name: 'Terminal command' });
     expect(input).toHaveFocus();
@@ -34,6 +34,7 @@ describe('Terminal public routes', () => {
     expect(window.location.pathname).toBe('/projects/local-ai-lab/');
     expect(screen.getByRole('heading', { name: 'Local AI Lab' })).toBeInTheDocument();
     expect(screen.getByText('v0.2.0 ↗')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /^Bogdan Shchavinskyi/ })).toBeInTheDocument();
     expect(input).toHaveFocus();
   });
 

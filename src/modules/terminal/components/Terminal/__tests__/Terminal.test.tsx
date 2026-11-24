@@ -126,7 +126,7 @@ describe('Terminal', () => {
     expect(screen.getByText('Available Commands:')).toBeInTheDocument();
   });
 
-  it('animates a long blog post and eventually reveals its complete content', async () => {
+  it('shows a complete long article immediately while animating only its command label', async () => {
     const input = await bootTerminal();
     fireEvent.change(input, { target: { value: 'BLOG ai-slop-era' } });
     const form = input.closest('form');
@@ -137,11 +137,14 @@ describe('Terminal', () => {
 
     fireEvent.submit(form);
 
-    expect(screen.queryByText(/Keep the garbage out of your project/)).not.toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(100_000));
-
     expect(screen.getByText(/Keep the garbage out of your project/)).toBeInTheDocument();
+    expect(screen.queryByRole('img', { name: /^Bogdan Shchavinskyi/ })).not.toBeInTheDocument();
+    expect(screen.queryByText('$ BLOG ai-slop-era')).not.toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);
+    expect(input).toHaveFocus();
+
+    await act(() => vi.advanceTimersByTimeAsync(300));
+    expect(screen.getByText('$ BLOG ai-slop-era')).toBeInTheDocument();
   });
 
   it('runs every hidden command and clears back to help', async () => {

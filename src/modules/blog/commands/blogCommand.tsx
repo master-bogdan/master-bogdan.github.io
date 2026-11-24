@@ -51,9 +51,7 @@ const blogPostErrorOutput = (slug: string): ReactElement => {
 
 const blogPostContentOutput = (post: BlogPost): ReactElement => {
   return (
-    <Box>
-      <Typography sx={blogCommandStyles.title}>{post.title}</Typography>
-      <Typography sx={blogCommandStyles.publishedDate}>Published: {post.date}</Typography>
+    <Box component="article" sx={blogCommandStyles.article}>
       <Box sx={blogCommandStyles.markdown}>
         <ReactMarkdown
           skipHtml
@@ -64,6 +62,7 @@ const blogPostContentOutput = (post: BlogPost): ReactElement => {
           {post.content}
         </ReactMarkdown>
       </Box>
+      <Typography sx={blogCommandStyles.publishedDate}>Published: {post.date}</Typography>
       <Link href={contentHref('blog')} sx={blogCommandStyles.postLink}>
         ← All posts
       </Link>

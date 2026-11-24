@@ -24,6 +24,18 @@ export const terminalStyles = {
     borderRadius: '4px',
     boxShadow: '0 0 20px rgba(0, 255, 0, 0.1)',
   },
+  articleContainer: {
+    height: { xs: '100%', md: '100%' },
+  },
+  articleIdentity: {
+    display: 'inline-block',
+    fontFamily: 'var(--font-mono)',
+    fontSize: '14px',
+    color: ThemeColors.CYAN,
+    textDecoration: 'none',
+    mb: 1,
+    '&:hover': { textDecoration: 'underline' },
+  },
   header: {
     flexShrink: 0,
   },
@@ -52,6 +64,7 @@ export const terminalStyles = {
   },
   commandLabel: {
     flexShrink: 0,
+    minHeight: '1.5em',
     fontFamily: 'var(--font-mono)',
     fontSize: { xs: '12px', sm: '14px' },
     color: ThemeColors.MUTED,

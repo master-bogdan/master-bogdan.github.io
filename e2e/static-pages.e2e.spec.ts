@@ -7,6 +7,10 @@ test('serves each public view as crawlable terminal HTML without JavaScript', as
     ['blog/', 'Blog Posts:'],
     ['blog/welcome/', 'Welcome to My Terminal'],
     [
+      'blog/lost-interest-found-again/',
+      'How I lost interest in coding and found it again in AI agents',
+    ],
+    [
       'blog/ai-slop-era/',
       'The AI Slop Era: Why Your Project Needs a Concrete Wall of Linters, Tests, and Strict CI/CD',
     ],
@@ -57,6 +61,7 @@ test('includes all content URLs in the generated sitemap and serves certificatio
     '',
     'blog/',
     'blog/welcome/',
+    'blog/lost-interest-found-again/',
     'blog/ai-slop-era/',
     'resume/',
     'projects/',

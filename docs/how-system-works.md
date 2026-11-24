@@ -6,7 +6,7 @@
 2. `main.tsx` loads the local variable font and global reset.
 3. `AppThemeProvider` supplies the MUI theme.
 4. `App` renders the terminal.
-5. On the homepage, the boot sequence runs before help and the focused prompt appear. Direct content URLs already contain the terminal and selected output; React hydrates them without boot and starts the typewriter animation.
+5. On the homepage, the boot sequence runs before help and the focused prompt appear. Direct content URLs already contain the terminal and selected output; React hydrates them without boot. Articles show their complete body immediately and animate only the command label; other command output keeps the typewriter animation.
 
 ## Command Execution
 
@@ -15,10 +15,11 @@ keyboard or quick command
   -> useTerminal.executeCommand
   -> commandRegistry
   -> React output
-  -> TypewriterOutput
+  -> complete article body + animated command label
+     OR TypewriterOutput for other commands
 ```
 
-Input is trimmed and split into a lowercase command name plus arguments. Unknown commands return the preserved error. `clear` removes the current output and restores help after the preserved delay. Selecting an internal content link executes its command in the existing terminal and updates browser history. Ctrl/Cmd-click, downloads, and external links retain native browser behavior. Back and Forward restore and animate output, and route metadata follows the selected page.
+Input is trimmed and split into a lowercase command name plus arguments. Unknown commands return the preserved error. `clear` removes the current output and restores help after the preserved delay. Selecting an internal content link executes its command in the existing terminal and updates browser history. Ctrl/Cmd-click, downloads, and external links retain native browser behavior. Back and Forward restore the selected output and its article or ordinary terminal layout, and route metadata follows the selected page.
 
 ## Blog Pipeline
 

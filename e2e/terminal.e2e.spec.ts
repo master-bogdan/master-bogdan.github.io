@@ -24,17 +24,19 @@ test('boots, accepts keyboard commands, and opens a Markdown post', async ({ pag
   await commandInput.press('Enter');
   await expect(page.getByText('Bogdan Shchavinskyi', { exact: true })).toBeVisible();
 
-  await page.getByRole('link', { name: 'blog', exact: true }).click();
-  await page.getByRole('link', { name: 'Welcome to My Terminal' }).click();
-
-  await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
-  await expect(page.getByText('Why a Terminal?')).toBeVisible();
-
   await expect(
     page.getByAltText(
       'Bogdan Shchavinskyi — Senior Software Engineer & Tech Lead — Building software products, cloud platforms, and agentic AI workflows — from architecture to production.',
     ),
   ).toHaveAttribute('src', new URL('banner.svg', siteUrl).pathname);
+
+  await page.getByRole('link', { name: 'blog', exact: true }).click();
+  await page.getByRole('link', { name: 'Welcome to My Terminal' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
+  await expect(page.getByText('Why a Terminal?')).toBeVisible();
+  await expect(page.getByRole('img', { name: /^Bogdan Shchavinskyi/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Bogdan Shchavinskyi' })).toBeVisible();
 
   const bannerResponse = await page.request.get(new URL('banner.svg', siteUrl).href);
   expect(bannerResponse.ok()).toBeTruthy();

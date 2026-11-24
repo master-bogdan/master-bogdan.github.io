@@ -38,9 +38,9 @@
 
 - Command input is keyboard-first and remains focused after execution.
 - Boot and typewriter sequences clean up their timers.
-- Desktop uses a centered, bounded panel; mobile and short windows use the available height.
+- Desktop uses a centered, bounded panel for ordinary Commands. Blog Posts, mobile, and short windows use the available height.
 - Only command output scrolls; the banner, quick commands, command label, and input stay fixed.
-- New output starts at the top. All command output uses typewriter animation, including public routes and browser history navigation.
+- New output starts at the top. Blog Posts are readable immediately with an animated Command label and a compact identity header. Other Command output uses typewriter animation, including Public Routes and browser history navigation.
 - Blog metadata errors and duplicate slugs stop the build.
 - Content is local; the production site needs no application server.
 

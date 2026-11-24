@@ -57,7 +57,7 @@ for (const viewport of [
     await input.press('Enter');
     await page.clock.runFor(3000);
     await expect(output.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(output.getByText(/Keep the garbage out of your project/)).toHaveCount(0);
+    await expect(output.getByText(/Keep the garbage out of your project/)).toBeAttached();
     await expect.poll(() => output.evaluate((element) => element.scrollTop)).toBe(0);
     await expect(input).toBeFocused();
   });

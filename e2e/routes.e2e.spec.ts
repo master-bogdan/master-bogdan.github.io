@@ -11,7 +11,7 @@ test('keeps direct links, commands, and browser history inside one terminal', as
   const input = page.getByRole('textbox', { name: 'Terminal command' });
   await expect(input).toBeFocused();
   const output = page.getByRole('region', { name: 'Command output' });
-  await expect(output.getByText('Happy exploring!')).toHaveCount(0);
+  await expect(output.getByText('Happy exploring!')).toBeAttached();
   await page.clock.runFor(8000);
   await expect(output.getByText('Happy exploring!')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
@@ -20,11 +20,13 @@ test('keeps direct links, commands, and browser history inside one terminal', as
     document.documentElement.dataset.navigationTest = 'same-document';
   });
   const panel = page.getByRole('region', { name: 'Command output' }).locator('..');
-  const initialBounds = await panel.boundingBox();
+  const articleBounds = await panel.boundingBox();
 
   await page.getByRole('link', { name: 'projects', exact: true }).click();
   await page.clock.runFor(5000);
   await expect(page).toHaveURL(new URL('projects/', siteUrl).href);
+  const initialBounds = await panel.boundingBox();
+  expect(initialBounds).not.toEqual(articleBounds);
   await page.getByRole('link', { name: 'Neovim Practice', exact: true }).click();
   await page.clock.runFor(1000);
   await expect(page).toHaveURL(new URL('projects/neovim-practice/', siteUrl).href);
@@ -51,7 +53,7 @@ test('keeps direct links, commands, and browser history inside one terminal', as
   await input.press('Enter');
   await expect(page).toHaveURL(new URL('blog/ai-slop-era/', siteUrl).href);
   await page.clock.runFor(1000);
-  await expect(output.getByText('Keep the garbage out of your project')).toHaveCount(0);
+  await expect(output.getByText('Keep the garbage out of your project')).toBeAttached();
   await expect(input).toBeFocused();
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
 

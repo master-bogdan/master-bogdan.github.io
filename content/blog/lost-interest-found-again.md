@@ -8,7 +8,7 @@ slug: "lost-interest-found-again"
 
 ![Terminal-style article header with an ASCII octopus](/blog/lost-interest-found-again-header.png)
 
-Nov 17, 2026 · @Bogdan Shchavinskyi
+By **Bogdan Shchavinskyi**
 
 Last year I wrote maybe 1% of all the code I delivered. The rest was written by AI.
 
