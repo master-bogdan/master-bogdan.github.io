@@ -6,7 +6,7 @@ describe('Public page metadata', () => {
   afterEach(() => vi.restoreAllMocks());
   it.each([
     ['/', 'Bogdan Shchavinskyi | Senior Software Engineer & Tech Lead', 'Person'],
-    ['/resume/', 'Resume | Bogdan Shchavinskyi', 'Person'],
+    ['/contacts/', 'Contact & CV | Bogdan Shchavinskyi', 'Person'],
     ['/blog/', 'Blog | Bogdan Shchavinskyi', 'CollectionPage'],
     ['/blog/welcome/', 'Welcome to My Terminal | Bogdan Shchavinskyi', 'BlogPosting'],
     ['/projects/', 'Projects | Bogdan Shchavinskyi', 'CollectionPage'],
@@ -39,4 +39,26 @@ describe('Public page metadata', () => {
     expect(JSON.parse(metadata.structuredData).headline).toBe(title);
     expect(metadata.title).toContain(title);
   });
+  it('uses article artwork for sharing and the site image for other pages', () => {
+    const article = pageMetadata('/blog/lost-interest-found-again/');
+    expect(article.image).toBe(
+      'https://master-bogdan.github.io/blog/lost-interest-found-again-header.png',
+    );
+    expect(article.imageAlt).toBe('How I lost interest in coding and found it again in AI agents');
+    expect(pageMetadata('/contacts/').image).toBe(
+      'https://master-bogdan.github.io/social-preview.png',
+    );
+  });
+
+  it.each(['/resume/', '/resume/index.html'])(
+    'uses Contact & CV as the canonical page for legacy resume URLs %s',
+    (pathname) => {
+      expect(pageMetadata(pathname)).toMatchObject({
+        title: 'Contact & CV | Bogdan Shchavinskyi',
+        canonical: 'https://master-bogdan.github.io/contacts/',
+        ogType: 'website',
+        noindex: false,
+      });
+    },
+  );
 });

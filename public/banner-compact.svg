@@ -1,0 +1,142 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1600 180"
+  role="img"
+  aria-label="Bogdan Shchavinskyi — Senior Software Engineer &amp; Tech Lead — Building software products, cloud platforms, and agentic AI workflows — from architecture to production."
+>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070A0F" />
+      <stop offset="1" stop-color="#05070B" />
+    </linearGradient>
+
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#18C7FF" stroke-opacity="0.08" stroke-width="1" />
+      <path
+        d="M12 0V24M0 12H24"
+        fill="none"
+        stroke="#18C7FF"
+        stroke-opacity="0.05"
+        stroke-width="1"
+      />
+    </pattern>
+
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.4" result="b" />
+      <feColorMatrix
+        in="b"
+        type="matrix"
+        values="1 0 0 0 0                 0 1 0 0 0.9                 0 0 1 0 1                 0 0 0 1 0"
+        result="c"
+      />
+      <feMerge>
+        <feMergeNode in="c" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" />
+    </filter>
+  </defs>
+
+  <rect width="1600" height="180" rx="14" fill="url(#bg)" />
+  <rect x="14" y="14" width="1572" height="152" rx="12" fill="url(#grid)" />
+
+  <rect
+    x="10"
+    y="10"
+    width="1580"
+    height="160"
+    rx="14"
+    fill="none"
+    stroke="#18C7FF"
+    stroke-opacity="0.55"
+    stroke-width="2"
+  />
+  <rect
+    x="16"
+    y="16"
+    width="1568"
+    height="148"
+    rx="12"
+    fill="none"
+    stroke="#18C7FF"
+    stroke-opacity="0.22"
+    stroke-width="1"
+  />
+
+  <g
+    font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace"
+  >
+    <text filter="url(#glow)" x="48" y="65" font-size="52" font-weight="900" fill="#18C7FF">
+      Bogdan
+      <tspan fill="#00FF66">Shchavinskyi</tspan>
+    </text>
+    <text filter="url(#glow)" x="48" y="106" font-size="28" font-weight="700" fill="#18C7FF">
+      Senior Software Engineer &amp; Tech Lead
+    </text>
+    <text
+      x="48"
+      y="148"
+      font-size="20"
+      fill="#00FF66"
+      stroke="#05070B"
+      stroke-width="2"
+      paint-order="stroke fill"
+      stroke-linejoin="round"
+    >
+      Building software products, cloud platforms, and agentic AI workflows — from architecture to
+      production.
+    </text>
+  </g>
+
+  <g transform="translate(1420 0) scale(0.72)" filter="url(#glow)">
+    <ellipse
+      cx="90"
+      cy="200"
+      rx="88"
+      ry="14"
+      fill="#18C7FF"
+      fill-opacity="0.12"
+      filter="url(#soft)"
+    />
+
+    <path
+      d="M48 180c-10-26-14-46-14-70 0-46 30-78 56-78s56 32 56 78c0 24-4 44-14 70"
+      fill="none"
+      stroke="#18C7FF"
+      stroke-width="3"
+      stroke-opacity="0.8"
+    />
+    <path
+      d="M62 172c-8-22-10-38-10-58 0-36 22-60 38-60s38 24 38 60c0 20-2 36-10 58"
+      fill="none"
+      stroke="#18C7FF"
+      stroke-width="3"
+      stroke-opacity="0.55"
+    />
+
+    <path
+      d="M74 166c-6-18-7-30-7-46 0-24 14-40 23-40s23 16 23 40c0 16-1 28-7 46"
+      fill="none"
+      stroke="#18C7FF"
+      stroke-opacity="0.9"
+      stroke-width="3"
+    />
+
+    <rect
+      x="70"
+      y="14"
+      width="40"
+      height="46"
+      rx="12"
+      fill="none"
+      stroke="#18C7FF"
+      stroke-width="3"
+    />
+    <circle cx="82" cy="32" r="3.5" fill="#18C7FF" />
+    <circle cx="98" cy="32" r="3.5" fill="#18C7FF" />
+    <path d="M86 44h8" stroke="#18C7FF" stroke-width="3" stroke-linecap="round" />
+  </g>
+</svg>

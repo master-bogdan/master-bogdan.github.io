@@ -9,9 +9,11 @@ Command
   execute(args): ReactNode
   href?(args): string | undefined
   hidden?: boolean
+  displayName?: string
+  view?(args): 'terminal' | 'article'
 ```
 
-`href` returns a public permalink for supported content. Output uses ordinary links; the terminal handles internal navigation without content modules depending on interaction state.
+`displayName` labels quick controls without changing typed command names. `view` selects article presentation for valid posts. `href` returns a public permalink for supported content. Output uses ordinary links; the terminal handles internal navigation without content modules depending on interaction state.
 
 ## Command Output
 
@@ -40,6 +42,7 @@ BlogPost
   title: string
   date: YYYY-MM-DD string
   content: Markdown string
+  previewImage?: local /blog/ image path
 ```
 
 The source is untrusted authored input. Parsing produces the validated post model used by both build validation and browser rendering.

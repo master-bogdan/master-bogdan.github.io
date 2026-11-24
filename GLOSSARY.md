@@ -18,7 +18,11 @@
 
 **Base Path**: the URL prefix used for the application and local assets; it defaults to `/`.
 
-**Public Route**: a shareable URL that opens a particular content view inside the Terminal.
+**Article View**: the document reading surface for a Blog Post, with complete text, optional artwork, and a sticky navigation header.
+
+**Contact & CV**: the combined contact links and CV download, addressed by `contacts` and the compatibility alias `resume`.
+
+**Public Route**: a shareable URL that opens a particular terminal output or Article View.
 
 **Featured Project**: a selected piece of public work with a description, examples, and a repository link.
 
@@ -29,19 +33,18 @@
 - The Terminal executes Commands through one registry.
 - A Command is either visible or hidden.
 - The `blog` command lists or opens Blog Posts.
-- Public Routes address the Blog Post list, individual Blog Posts, the short resume, and Featured Projects.
+- Public Routes address the Blog Post list, individual Blog Posts, Contact & CV, and Featured Projects.
 - A Featured Project can have Project Updates.
 - The Static Build validates every Blog Post before emitting assets.
 - The Base Path is applied to banner, CV download, and local Markdown image URLs.
 
 ## Invariants
 
-- Command input is keyboard-first and remains focused after execution.
+- Command input is keyboard-first and remains focused after execution in the Terminal. Article Views have no Prompt.
 - Boot and typewriter sequences clean up their timers.
-- Desktop uses a centered, bounded panel for ordinary Commands. Blog Posts, mobile, and short windows use the available height.
-- Only command output scrolls; the banner, quick commands, command label, and input stay fixed.
-- New output starts at the top. Blog Posts are readable immediately with an animated Command label and a compact identity header. Other Command output uses typewriter animation, including Public Routes and browser history navigation.
+- The Terminal keeps a stable frame across ordinary Commands, adapting to the available viewport.
+- In the Terminal, only command output scrolls; the banner, quick commands, command label, and Prompt stay fixed. Article Views use document scrolling.
+- New output starts at the top. Article Views show complete content immediately. Other Command output uses typewriter animation, including Public Routes and browser history navigation.
 - Blog metadata errors and duplicate slugs stop the build.
 - Content is local; the production site needs no application server.
-
-- Direct visits and browser history navigation open the requested content in the same Terminal.
+- Direct content visits, internal returns, banner reset, and browser history navigation skip boot. An initial homepage visit retains boot.

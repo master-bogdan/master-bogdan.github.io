@@ -41,7 +41,7 @@ For the standard repository URL, use `npm run validate`. The browser tests use t
 
 ### Public CV
 
-The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The `resume` command and `/resume/` focus on the PDF download and LinkedIn. The `whoami` command presents the engineering background, technologies, selected impact, and certification artwork. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
+The current public CV is `public/Bogdan_Shchavinskyi_CV.pdf`. The Contact & CV section at `/contacts/` combines the PDF download, email, LinkedIn, and GitHub. The `contacts` command opens it; `resume` and `/resume/` remain compatibility aliases. The `whoami` command presents the engineering background, technologies, selected impact, and certification artwork. The no-JavaScript profile includes the same download. The PDF is copied into the published site during the build.
 
 When replacing the CV, keep the public filename stable and update `whoami`, banner text, and SEO/profile metadata in `index.html` to match. Run `npm run assets:generate` after banner changes so the social preview stays current, then run `npm run validate`.
 
@@ -57,23 +57,25 @@ npm run assets:generate
 
 This uses the existing Playwright Chromium installation; it is not part of the production build.
 
-The terminal selects `public/banner-mobile.svg` below 600px, `public/banner-tablet.svg` below 900px, and `public/banner.svg` for desktop. Keep their profile wording consistent when editing the banner; the social preview continues to use the desktop artwork.
+The terminal selects `public/banner-mobile.svg` below 600px, `public/banner-tablet.svg` below 1200px, and `public/banner-wide.svg` for desktop. Short landscape windows at least 600px wide use `public/banner-compact.svg`. Keep their profile wording consistent when editing the banner; the social preview continues to use `public/banner.svg`.
 
 The sitemap is generated from all published public routes and is available at `https://master-bogdan.github.io/sitemap.xml`. Add the site as a URL-prefix property in Google Search Console, verify ownership using Google's supplied HTML verification file in `public/` or meta tag in `index.html`, then submit the sitemap. Indexing and search appearance are controlled by search engines, not guaranteed by these files.
 
 When changing the public domain or deployment path, update `profile.url` in `src/config/profile.ts` and the absolute sharing-image URLs in `index.html`, along with `VITE_BASE_PATH`. Favicon and touch-icon links already follow the Vite base path. The canonical and sharing URLs intentionally point to production even during local development.
 
-### Public terminal URLs
+### Public URLs
 
-The terminal stays the interface at every URL:
+Public content has shareable routes:
 
 - `/blog/` lists posts; `/blog/<slug>/` opens an article.
-- `/resume/` provides the CV download and LinkedIn profile.
+- `/contacts/` provides Contact & CV; `/resume/` preserves older links with `/contacts/` as its canonical URL.
 - `/projects/` lists featured work; `/projects/<slug>/` opens a project.
 
-Links and corresponding commands update the URL without reloading the terminal. Browser Back and Forward restore earlier views. Article pages use a compact identity header and the full available panel height. Their complete text appears immediately; only the short command label animates at 7 ms per character. Other command output keeps the same full typewriter animation, including direct visits and restored routes. Direct visits skip boot. The homepage keeps its boot sequence and hidden commands.
+Links and corresponding commands update the URL without reloading the document. Browser Back and Forward restore earlier views. Ordinary commands keep a stable, larger terminal frame: only output scrolls, while the banner, controls, command label, and prompt stay visible. The banner resets to help without boot. Returning from an article through the identity, author, or Terminal links also skips boot. Initial homepage visits retain the boot sequence and hidden commands.
 
-After Vite builds, `scripts/prerender.mjs` renders the same React terminal into an `index.html` for each content URL, plus `sitemap.xml`. GitHub Pages therefore serves deep links and refreshes directly. Pages include their content and metadata before JavaScript runs; hydration animates the article command label or other command output and adds keyboard commands and in-terminal navigation. Complete static content stays readable without JavaScript; a JavaScript-only pending style prevents a full-text flash before animation begins and reveals the static output after three seconds if hydration fails. Explicit `index.html` URLs open the same content and retain the directory URL as their canonical address. Preview base paths are kept separate from `profile.url`, which always describes the actual production address.
+Article pages use normal document scrolling, a sticky identity/navigation header, a readable text column, and optional artwork. The complete article appears immediately with no typewriter animation or terminal input. The blog index remains a numbered text list without thumbnails. Other command output keeps its typewriter animation, including direct visits and restored routes. Direct content visits skip boot.
+
+After Vite builds, `scripts/prerender.mjs` renders these same React views into an `index.html` for each content URL, plus `sitemap.xml`. GitHub Pages therefore serves deep links and refreshes directly. Pages include their content and metadata before JavaScript runs; hydration adds navigation and terminal interaction. Complete static content stays readable without JavaScript. For animated terminal output, a JavaScript-only pending style prevents a full-text flash and reveals static output after three seconds if hydration fails. Explicit `index.html` URLs open the same content and retain the directory URL as their canonical address. Preview base paths remain separate from `profile.url`, which describes the actual production address. The sitemap contains unique canonical URLs, excluding the legacy resume alias.
 
 ### Featured projects
 
@@ -124,9 +126,11 @@ slug: useful-title
 Post content goes here.
 ```
 
-Commit and push a post to `main` to rebuild and deploy it. Markdown is bundled at build time; GitHub Pages needs no application server or Jekyll configuration. All posts in this directory become public. Posts open inside the terminal at `/blog/<slug>/`; their HTML pages and sitemap entries are generated automatically during the build.
+Submit posts in a pull request; the user merges approved changes to `main` to rebuild and deploy. Markdown is bundled at build time; GitHub Pages needs no application server or Jekyll configuration. All posts in this directory become public. Posts open in the article view at `/blog/<slug>/`; their HTML pages and sitemap entries are generated automatically during the build.
 
-`title`, `date`, and `slug` are required non-empty strings. Dates use `YYYY-MM-DD`. Slugs are normalized to lowercase, must contain only letters, numbers, and single hyphens, and must be unique. Posts must be regular `.md` files; symbolic links and YAML aliases are rejected. Invalid posts fail the production build. Posts are sorted newest first, then by slug. GitHub Flavored Markdown is supported. Put local post images under `public/blog/` and reference them as `/blog/image-name.png`. Use a single H1 in the Markdown body. A standalone image immediately after that H1 acts as a title-bearing cover: the H1 stays available to assistive technology while the artwork supplies the visual title. Publication dates appear once in the article footer; keep body bylines to the author name.
+`title`, `date`, and `slug` are required non-empty strings. Dates use `YYYY-MM-DD`. Slugs are normalized to lowercase, must contain only letters, numbers, and single hyphens, and must be unique. Posts must be regular `.md` files; symbolic links and YAML aliases are rejected. Invalid posts fail the production build. Posts are sorted newest first, then by slug. GitHub Flavored Markdown is supported. Put local post images under `public/blog/` and reference them as `/blog/image-name.png`. Use a single H1 in the Markdown body; the article view renders the title from metadata and removes that leading duplicate heading. A leading `By **Author**` line is replaced by the shared profile byline and publication date in the article header.
+
+Optional `previewImage` front matter selects article artwork and the sharing image, for example `previewImage: /blog/useful-title.png`. It must be a non-empty local path under `/blog/`, using letters, numbers, underscores, hyphens, and subdirectories with a PNG, JPEG, WebP, or AVIF extension. The artwork is displayed unchanged below the article title and byline; the blog index does not display it. Posts without this field use the site sharing preview and have no article artwork.
 
 ## Structure
 

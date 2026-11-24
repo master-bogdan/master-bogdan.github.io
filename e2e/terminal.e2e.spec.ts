@@ -36,19 +36,21 @@ test('boots, accepts keyboard commands, and opens a Markdown post', async ({ pag
   await expect(page.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeVisible();
   await expect(page.getByText('Why a Terminal?')).toBeVisible();
   await expect(page.getByRole('img', { name: /^Bogdan Shchavinskyi/ })).toHaveCount(0);
-  await expect(page.getByRole('link', { name: 'Bogdan Shchavinskyi' })).toBeVisible();
+  await expect(
+    page.locator('header').getByRole('link', { name: 'Bogdan Shchavinskyi' }),
+  ).toBeVisible();
 
   const bannerResponse = await page.request.get(new URL('banner.svg', siteUrl).href);
   expect(bannerResponse.ok()).toBeTruthy();
   expect(bannerResponse.headers()['content-type']).toContain('image/svg+xml');
 
-  await commandInput.fill('resume');
+  await page.getByRole('link', { name: 'Contact & CV', exact: true }).click();
   await commandInput.press('Enter');
-  await expect(page.getByRole('link', { name: '[View LinkedIn profile]' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'View LinkedIn profile' })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/b-shchavinskyi-fullstack',
   );
-  const resumeLink = page.getByRole('link', { name: '[Download PDF]' });
+  const resumeLink = page.getByRole('link', { name: 'Download CV (PDF)' });
   const resumeUrl = new URL('Bogdan_Shchavinskyi_CV.pdf', siteUrl);
   await expect(resumeLink).toHaveAttribute('href', resumeUrl.pathname);
   await expect(resumeLink).toHaveAttribute('download', 'Bogdan_Shchavinskyi_CV.pdf');
@@ -75,7 +77,7 @@ test('keeps the CV download in view after typing in a short window', async ({ pa
   await commandInput.fill('resume');
   await commandInput.press('Enter');
 
-  const resumeLink = page.getByRole('link', { name: '[Download PDF]' });
+  const resumeLink = page.getByRole('link', { name: 'Download CV (PDF)' });
   await expect(resumeLink).toBeInViewport({ ratio: 1 });
 
   const downloadPromise = page.waitForEvent('download');

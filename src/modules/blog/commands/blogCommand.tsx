@@ -5,6 +5,7 @@ import type { ReactElement } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import { appConfig, profile } from '@/config';
 import { contentHref } from '@/modules/navigation';
 
 import { getBlogPost, getBlogPosts } from '../blogPosts';
@@ -14,6 +15,7 @@ import { blogCommandStyles } from './styles';
 
 const DisallowedElements = ['script', 'iframe', 'form', 'input', 'button', 'style', 'link'];
 const RemarkPlugins = [remarkGfm];
+const ArticleDate = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' });
 
 const blogPostListOutput = (): ReactElement => {
   const posts = getBlogPosts();
@@ -50,8 +52,39 @@ const blogPostErrorOutput = (slug: string): ReactElement => {
 };
 
 const blogPostContentOutput = (post: BlogPost): ReactElement => {
+  const body = post.content
+    .replace(/^\s*# [^\r\n]+\r?\n+/, '')
+    .replace(/^By \*\*[^\r\n]+\*\*\r?\n+/, '');
+
   return (
     <Box component="article" sx={blogCommandStyles.article}>
+      <Link href={contentHref('blog')} sx={blogCommandStyles.backLink}>
+        ← All posts
+      </Link>
+      <Typography component="h1" sx={blogCommandStyles.articleTitle}>
+        {post.title}
+      </Typography>
+      <Box sx={blogCommandStyles.articleMetadata}>
+        <Link href={appConfig.basePath} sx={blogCommandStyles.author}>
+          {profile.name}
+        </Link>
+        <Box component="span" aria-hidden="true">
+          ·
+        </Box>
+        <Box component="time" dateTime={post.date}>
+          {ArticleDate.format(new Date(`${post.date}T00:00:00Z`))}
+        </Box>
+      </Box>
+      {post.previewImage ? (
+        <Box
+          component="img"
+          src={`${appConfig.basePath}${post.previewImage.slice(1)}`}
+          alt={`Article artwork for ${post.title}`}
+          width={2400}
+          height={720}
+          sx={blogCommandStyles.articleArtwork}
+        />
+      ) : null}
       <Box sx={blogCommandStyles.markdown}>
         <ReactMarkdown
           skipHtml
@@ -59,13 +92,14 @@ const blogPostContentOutput = (post: BlogPost): ReactElement => {
           remarkPlugins={RemarkPlugins}
           urlTransform={transformMarkdownUrl}
         >
-          {post.content}
+          {body}
         </ReactMarkdown>
       </Box>
-      <Typography sx={blogCommandStyles.publishedDate}>Published: {post.date}</Typography>
-      <Link href={contentHref('blog')} sx={blogCommandStyles.postLink}>
-        ← All posts
-      </Link>
+      <Box sx={blogCommandStyles.articleFooter}>
+        <Link href={contentHref('blog')} sx={blogCommandStyles.backLink}>
+          ← All posts
+        </Link>
+      </Box>
     </Box>
   );
 };

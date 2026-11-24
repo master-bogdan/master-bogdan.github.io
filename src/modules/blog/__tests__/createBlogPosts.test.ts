@@ -101,4 +101,33 @@ describe('createBlogPosts', () => {
       "content/blog/invalid-slug.md: front matter field 'slug' must use letters, numbers, and single hyphens",
     );
   });
+  it('preserves a local sharing image on an authored post', () => {
+    const posts = createBlogPosts([
+      createSource(
+        'content/blog/illustrated.md',
+        'title: Illustrated\ndate: 2026-11-17\nslug: illustrated\npreviewImage: /blog/cover.png',
+      ),
+    ]);
+
+    expect(posts[0]).toMatchObject({
+      title: 'Illustrated',
+      previewImage: '/blog/cover.png',
+    });
+  });
+
+  it.each([
+    'previewImage: ""',
+    'previewImage: 42',
+    'previewImage: true',
+    'previewImage: /blog/../outside.png',
+    'previewImage: /projects/cover.png',
+    'previewImage: https://example.com/cover.png',
+  ])('rejects invalid sharing image metadata %s', (imageMetadata) => {
+    const source = createSource(
+      'content/blog/invalid-image.md',
+      `title: Invalid image\ndate: 2026-11-17\nslug: invalid-image\n${imageMetadata}`,
+    );
+
+    expect(() => createBlogPosts([source])).toThrow(/previewImage/);
+  });
 });

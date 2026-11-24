@@ -7,6 +7,7 @@ type PageContent = {
   readonly heading: string;
   readonly description: string;
   readonly schemaType: 'Person' | 'BlogPosting' | 'CreativeWork' | 'CollectionPage';
+  readonly image?: string;
   readonly datePublished?: string;
   readonly noindex?: boolean;
 };
@@ -15,19 +16,24 @@ type PageMetadata = {
   readonly title: string;
   readonly description: string;
   readonly canonical: string;
+  readonly image: string;
+  readonly imageAlt: string;
   readonly ogType: 'article' | 'website';
   readonly structuredData: string;
   readonly noindex: boolean;
 };
 
+const contactContent: PageContent = {
+  heading: 'Contact & CV',
+  description:
+    'Contact Bogdan Shchavinskyi by email, find his LinkedIn and GitHub profiles, or download his CV. Senior Software Engineer & Tech Lead.',
+  schemaType: 'Person',
+};
+
 const overviewContent: Readonly<Record<string, PageContent>> = {
   '': { heading: profile.role, description: profile.description, schemaType: 'Person' },
-  resume: {
-    heading: 'Resume',
-    description:
-      "Download Bogdan Shchavinskyi's CV or view his professional experience on LinkedIn. Senior Software Engineer & Tech Lead.",
-    schemaType: 'Person',
-  },
+  contacts: contactContent,
+  resume: contactContent,
   blog: {
     heading: 'Blog',
     description:
@@ -70,6 +76,7 @@ const describePage = (command: string | undefined, slug: string | undefined): Pa
       description: excerpt || post.title,
       schemaType: 'BlogPosting',
       datePublished: post.date,
+      ...(post.previewImage ? { image: post.previewImage } : {}),
     };
   }
   const project = getProject(slug);
@@ -120,12 +127,17 @@ const serializeStructuredData = (content: PageContent, canonical: string): strin
 export const pageMetadata = (pathname: string): PageMetadata => {
   const [command, slug] = routeCommand(pathname)?.split(' ') ?? [];
   const content = describePage(command, slug);
-  const relativePath = command ? `${command}/${slug ? `${slug}/` : ''}` : '';
+  const canonicalCommand = command === 'resume' ? 'contacts' : command;
+  const relativePath = canonicalCommand ? `${canonicalCommand}/${slug ? `${slug}/` : ''}` : '';
   const canonical = new URL(relativePath, profile.url).href;
   return {
     title: command ? `${content.heading} | ${profile.name}` : `${profile.name} | ${profile.role}`,
     description: content.description,
     canonical,
+    image: new URL(content.image ?? 'social-preview.png', profile.url).href,
+    imageAlt: content.image
+      ? content.heading
+      : `${profile.name} — ${profile.role} — ${profile.tagline}`,
     ogType: content.schemaType === 'BlogPosting' ? 'article' : 'website',
     structuredData: serializeStructuredData(content, canonical),
     noindex: content.noindex ?? false,
@@ -142,7 +154,11 @@ export const updatePageMetadata = (pathname: string): void => {
     'meta[property="og:description"]': metadata.description,
     'meta[property="og:url"]': metadata.canonical,
     'meta[property="og:type"]': metadata.ogType,
+    'meta[property="og:image"]': metadata.image,
+    'meta[property="og:image:alt"]': metadata.imageAlt,
     'meta[name="twitter:title"]': metadata.title,
+    'meta[name="twitter:image"]': metadata.image,
+    'meta[name="twitter:image:alt"]': metadata.imageAlt,
     'meta[name="twitter:description"]': metadata.description,
     'meta[name="robots"]': metadata.noindex
       ? 'noindex, follow'

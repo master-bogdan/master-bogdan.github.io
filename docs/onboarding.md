@@ -36,7 +36,7 @@ Node must be in the supported 24.x range and npm must be 11.x.
 - Blog front matter is a strict build contract, not optional metadata.
 - Blog posts must be regular files with URL-safe slugs; symbolic links and YAML aliases fail the build.
 - Hidden commands are preserved product behavior.
-- Blog Posts appear in full immediately in a full-height panel with a compact identity header; only their command label animates. Other command output animates at 7 ms per character. Public routes skip boot; browser tests can advance the clock for animated output. Tests without JavaScript verify the full static output.
+- Blog Posts appear in full immediately in an Article View with artwork and a sticky header, without a prompt or typewriter animation. Ordinary commands keep a stable terminal frame. Other command output animates at 7 ms per character. Direct content routes and internal returns/reset skip boot; browser tests can advance the clock for animated output. Tests without JavaScript verify the full static output.
 - Direct dependency versions are intentionally exact.
 
 ## Before Handoff

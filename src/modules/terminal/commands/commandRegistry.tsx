@@ -4,7 +4,7 @@ import { blogCommand, getBlogPost } from '@/modules/blog';
 import { contentHref } from '@/modules/navigation';
 import { getProject, projectsCommand } from '@/modules/projects';
 
-import type { Command } from '../types';
+import type { Command, CommandView } from '../types';
 import { contactsCommand } from './contactsCommand';
 import { helpCommand } from './helpCommand';
 import {
@@ -17,7 +17,6 @@ import {
   rickrollCommand,
   sudoCommand,
 } from './hidden';
-import { resumeCommand } from './resumeCommand';
 import { whoamiCommand } from './whoamiCommand';
 import { unknownCommand } from './unknownCommand';
 
@@ -38,18 +37,22 @@ export const commandRegistry: Readonly<Record<string, Command>> = {
     name: 'blog',
     description: 'Read blog posts',
     execute: blogCommand,
+    view: (args) => (args[0] && getBlogPost(args[0]) ? 'article' : 'terminal'),
     href: (args) => (!args[0] || getBlogPost(args[0]) ? contentHref('blog', args[0]) : undefined),
   },
   contacts: {
     name: 'contacts',
-    description: 'Get contact information',
+    displayName: 'Contact & CV',
+    description: 'Contact details and CV download',
     execute: contactsCommand,
+    href: () => contentHref('contacts'),
   },
   resume: {
     name: 'resume',
-    description: 'Download my resume',
-    execute: resumeCommand,
+    description: 'Contact details and CV download',
+    execute: contactsCommand,
     href: () => contentHref('resume'),
+    hidden: true,
   },
   clear: {
     name: 'clear',
@@ -130,4 +133,9 @@ export const commandOutput = (input: string): ReactNode => {
   const [name, ...args] = input.trim().toLowerCase().split(/\s+/);
   const command = getRegisteredCommand(name);
   return command ? command.execute(args) : unknownCommand(name);
+};
+
+export const commandView = (input: string): CommandView => {
+  const [name, ...args] = input.trim().toLowerCase().split(/\s+/);
+  return getRegisteredCommand(name)?.view?.(args) ?? 'terminal';
 };
