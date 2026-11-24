@@ -1,1 +1,1 @@
-export type { Command, CommandHandler, CommandOutput } from './command';
+export type { Command, CommandView, CommandHandler, CommandOutput } from './command';

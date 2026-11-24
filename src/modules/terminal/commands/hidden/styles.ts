@@ -2,7 +2,7 @@ import { ThemeColors } from '@/shared';
 
 const terminalText = {
   fontFamily: 'var(--font-mono)',
-  fontSize: '14px',
+  fontSize: 'var(--terminal-font-size, 16px)',
 } as const;
 
 export const hiddenCommandStyles = {

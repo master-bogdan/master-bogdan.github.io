@@ -4,6 +4,7 @@ import type { BlogPost, BlogPostSource } from '../types/blogPost.ts';
 
 const FrontMatterPattern = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/;
 const IsoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const PreviewImagePattern = /^\/blog\/[a-zA-Z0-9/_-]+\.(?:png|jpe?g|webp|avif)$/;
 const SlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const FrontMatterParseOptions = {
   maxAliasCount: 0,
@@ -27,7 +28,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> => {
 
 const readRequiredString = (
   metadata: Record<string, unknown>,
-  field: 'date' | 'slug' | 'title',
+  field: 'date' | 'slug' | 'title' | 'previewImage',
   path: string,
 ): string => {
   const value = metadata[field];
@@ -76,6 +77,13 @@ export const parseBlogPost = ({ path, markdown }: BlogPostSource): BlogPost => {
   const date = readRequiredString(metadata, 'date', path);
   const slug = readRequiredString(metadata, 'slug', path).toLowerCase();
   const title = readRequiredString(metadata, 'title', path);
+  const previewImage =
+    metadata.previewImage === undefined
+      ? undefined
+      : readRequiredString(metadata, 'previewImage', path);
+  if (previewImage && !PreviewImagePattern.test(previewImage)) {
+    throw new Error(`${path}: previewImage must reference an image under /blog/`);
+  }
   validateDate(date, path);
   validateSlug(slug, path);
 
@@ -84,5 +92,6 @@ export const parseBlogPost = ({ path, markdown }: BlogPostSource): BlogPost => {
     title,
     date,
     content: markdown.slice(frontMatter[0].length),
+    ...(previewImage ? { previewImage } : {}),
   };
 };

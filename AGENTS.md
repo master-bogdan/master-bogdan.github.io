@@ -33,6 +33,10 @@ This package is a static Vite/React terminal portfolio. Preserve command names, 
 - Do not edit generated `build/`, `coverage/`, `playwright-report/`, or `test-results/` output as source.
 - Do not invent personal facts, links, resume data, or contact details.
 
+## Delivery
+
+Create or update pull requests for review. The user merges them; never merge a PR or enable auto-merge.
+
 ## Verification
 
 Run the narrowest relevant test during development, then finish with:

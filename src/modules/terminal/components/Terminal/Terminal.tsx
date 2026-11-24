@@ -1,11 +1,13 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import type { MouseEvent, ReactElement } from 'react';
+import { useEffect, type MouseEvent, type ReactElement } from 'react';
 
 import { appConfig } from '@/config';
 import { routeCommand } from '@/modules/navigation';
 
+import { commandView } from '../../commands';
 import { useTerminal } from '../../hooks';
+import { ArticleHeader } from '../ArticleHeader';
 import { Banner } from '../Banner';
 import { BootSequence } from '../BootSequence';
 import { CommandInput } from '../CommandInput';
@@ -24,6 +26,20 @@ export function Terminal({
 }: TerminalProps): ReactElement {
   const { completeBoot, currentOutput, executeCommand, isBooting, outputRef, visibleCommands } =
     useTerminal(initialPath, onNavigate);
+  const isReadingArticle = commandView(currentOutput?.command ?? '') === 'article';
+  const output =
+    currentOutput &&
+    (isReadingArticle ? (
+      currentOutput.output
+    ) : (
+      <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
+    ));
+
+  useEffect(() => {
+    if (isReadingArticle) {
+      window.scrollTo(0, 0);
+    }
+  }, [isReadingArticle, currentOutput?.id]);
 
   const handleLinkClick = (event: MouseEvent<HTMLElement>): void => {
     const isPlainClick =
@@ -40,7 +56,9 @@ export function Terminal({
       return;
     }
     const url = new URL(anchor.href);
-    const command = routeCommand(url.pathname);
+    const isTerminalHome =
+      url.pathname === appConfig.basePath || url.pathname === `${appConfig.basePath}index.html`;
+    const command = isTerminalHome ? 'help' : routeCommand(url.pathname);
     const isInternalContent =
       url.origin === window.location.origin && command !== null && !url.hash && !url.search;
     if (isInternalContent && command) {
@@ -50,15 +68,26 @@ export function Terminal({
   };
 
   return (
-    <Box sx={terminalStyles.viewport} onClick={handleLinkClick}>
-      <Container maxWidth={false} sx={terminalStyles.container}>
-        {!isBooting ? (
+    <Box
+      sx={[terminalStyles.viewport, isReadingArticle && terminalStyles.articleViewport]}
+      onClick={handleLinkClick}
+    >
+      <Container
+        maxWidth={false}
+        sx={[
+          terminalStyles.container,
+          isBooting && terminalStyles.bootContainer,
+          isReadingArticle && terminalStyles.articleContainer,
+        ]}
+      >
+        {!isBooting && isReadingArticle ? <ArticleHeader /> : null}
+        {!isBooting && !isReadingArticle ? (
           <Box sx={terminalStyles.header}>
             <Banner />
             <QuickCommands commands={visibleCommands} onCommand={executeCommand} />
           </Box>
         ) : null}
-        {currentOutput ? (
+        {currentOutput && !isReadingArticle ? (
           <Box sx={terminalStyles.commandLabel}>$ {currentOutput.command}</Box>
         ) : null}
         <Box
@@ -66,16 +95,14 @@ export function Terminal({
           role="region"
           aria-label="Command output"
           tabIndex={0}
-          sx={terminalStyles.output}
+          sx={[terminalStyles.output, isReadingArticle && terminalStyles.articleOutput]}
         >
           {isBooting ? <BootSequence onComplete={completeBoot} /> : null}
-          {currentOutput ? (
-            <TypewriterOutput key={currentOutput.id}>{currentOutput.output}</TypewriterOutput>
-          ) : null}
+          {output}
         </Box>
-        {!isBooting ? (
+        {!isBooting && !isReadingArticle ? (
           <Box sx={terminalStyles.footer}>
-            <CommandInput onCommand={executeCommand} />
+            <CommandInput onCommand={executeCommand} outputId={currentOutput?.id} />
           </Box>
         ) : null}
       </Container>

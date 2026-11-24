@@ -11,8 +11,8 @@ test('centers a bounded desktop panel and shows when the prompt has focus', asyn
   if (!bounds) {
     throw new Error('Terminal panel must be visible');
   }
-  expect(bounds.height).toBeLessThan(900);
-  expect(bounds.height).toBeGreaterThan(700);
+  expect(bounds.height).toBeLessThan(1188);
+  expect(bounds.height).toBeGreaterThan(1000);
   expect(Math.abs(bounds.y - (1188 - bounds.y - bounds.height))).toBeLessThan(2);
 
   const form = page.locator('form');
@@ -33,12 +33,13 @@ test('selects readable mobile and tablet banners when resized', async ({ page })
   for (const [width, height, filename] of [
     [425, 808, 'banner-mobile.svg'],
     [768, 1024, 'banner-tablet.svg'],
-    [1280, 900, 'banner.svg'],
+    [1280, 900, 'banner-wide.svg'],
+    [844, 390, 'banner-compact.svg'],
   ] as const) {
     await page.setViewportSize({ width, height });
     const assetUrl = new URL(filename, page.url()).href;
     await expect
-      .poll(() => banner.evaluate((image) => (image as HTMLImageElement).currentSrc))
+      .poll(() => banner.evaluate((image: HTMLImageElement) => image.currentSrc))
       .toBe(assetUrl);
     const response = await page.request.get(assetUrl);
     expect(response.ok()).toBe(true);
@@ -52,7 +53,7 @@ test('keeps the complete tablet banner comfortably inside its frame', async ({ p
   await expect(
     page.locator('text').filter({ hasText: 'Building software products, cloud platforms,' }),
   ).toBeVisible();
-  await expect(page.locator('#penguin')).toBeVisible();
+  await expect(page.locator('#octopus')).toBeVisible();
   const margins = await page.locator('svg').evaluate((svg) => {
     const border = svg.querySelector<SVGRectElement>('rect[stroke]');
     if (!border) {

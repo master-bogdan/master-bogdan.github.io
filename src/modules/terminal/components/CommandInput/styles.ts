@@ -22,7 +22,7 @@ export const commandInputStyles = {
     position: 'relative',
     flex: 1,
     fontFamily: 'var(--font-mono)',
-    fontSize: { xs: '12px', sm: '14px' },
+    fontSize: 'var(--terminal-font-size, 16px)',
     color: ThemeColors.GREEN,
     display: 'flex',
     alignItems: 'center',
@@ -40,7 +40,7 @@ export const commandInputStyles = {
   },
   visibleInput: {
     fontFamily: 'var(--font-mono)',
-    fontSize: { xs: '12px', sm: '14px' },
+    fontSize: 'var(--terminal-font-size, 16px)',
     color: ThemeColors.GREEN,
     whiteSpace: 'pre',
     pointerEvents: 'none',

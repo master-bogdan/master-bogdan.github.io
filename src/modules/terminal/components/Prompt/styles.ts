@@ -8,7 +8,7 @@ export const promptStyles = {
   },
   text: {
     fontFamily: 'var(--font-mono)',
-    fontSize: '14px',
+    fontSize: 'var(--terminal-font-size, 16px)',
   },
   identity: {
     color: ThemeColors.GREEN,

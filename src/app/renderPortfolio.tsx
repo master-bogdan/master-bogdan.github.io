@@ -20,6 +20,7 @@ export const renderPortfolioPages = (): readonly RenderedPage[] => {
     appConfig.basePath,
     contentHref('blog'),
     ...getBlogPosts().map((post) => contentHref('blog', post.slug)),
+    contentHref('contacts'),
     contentHref('resume'),
     contentHref('projects'),
     ...projects.map((project) => contentHref('projects', project.slug)),

@@ -2,13 +2,12 @@
 title: "How I lost interest in coding and found it again in AI agents"
 date: "2026-11-17"
 slug: "lost-interest-found-again"
+previewImage: "/blog/lost-interest-found-again-header.png"
 ---
 
 # How I lost interest in coding and found it again in AI agents
 
-![Terminal-style article header with an ASCII octopus](/blog/lost-interest-found-again-header.png)
-
-Nov 17, 2026 · @Bogdan Shchavinskyi
+By **Bogdan Shchavinskyi**
 
 Last year I wrote maybe 1% of all the code I delivered. The rest was written by AI.
 

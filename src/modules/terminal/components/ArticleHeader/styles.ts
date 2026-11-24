@@ -1,0 +1,73 @@
+import { ThemeColors } from '@/shared';
+
+const link = {
+  fontFamily: 'var(--font-mono)',
+  fontSize: { xs: '14px', sm: '16px' },
+  textDecoration: 'none',
+  whiteSpace: 'nowrap',
+  color: '#a3aaa6',
+  py: 0.75,
+  '&:hover': { color: ThemeColors.CYAN },
+} as const;
+
+export const articleHeaderStyles = {
+  root: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 20,
+    backgroundColor: ThemeColors.BACKGROUND,
+    py: { xs: 1.5, sm: 2 },
+    borderBottom: '1px solid #2a302d',
+  },
+  inner: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 1.5,
+    width: '100%',
+    maxWidth: '1160px',
+    mx: 'auto',
+  },
+  identity: {
+    ...link,
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 1.25,
+    color: ThemeColors.WHITE,
+    fontSize: { xs: '15px', sm: '18px' },
+    fontWeight: 600,
+    py: 0,
+  },
+  logo: { display: 'block', width: { xs: '30px', sm: '36px' }, height: 'auto', flexShrink: 0 },
+  navigation: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: { xs: 1.5, sm: 3 },
+    width: { xs: '100%', sm: 'auto' },
+  },
+  links: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    minWidth: 0,
+    columnGap: { xs: 1.5, sm: 3 },
+    rowGap: 0.5,
+  },
+  link,
+  activeLink: { ...link, color: ThemeColors.CYAN },
+  terminal: {
+    ...link,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: ThemeColors.GREEN,
+    border: '1px solid #355a43',
+    backgroundColor: '#101b14',
+    borderRadius: '5px',
+    px: { xs: 1.5, sm: 2 },
+    py: 0.75,
+    '&:hover': { color: ThemeColors.WHITE, borderColor: ThemeColors.GREEN },
+  },
+} as const;

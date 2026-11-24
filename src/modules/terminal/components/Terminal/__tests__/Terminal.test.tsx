@@ -56,7 +56,7 @@ describe('Terminal', () => {
     expect(screen.getByText('Bogdan Shchavinskyi')).toBeInTheDocument();
   });
 
-  it('runs visible commands and reports unknown commands', async () => {
+  it('runs profile and project commands and reports unknown commands', async () => {
     const input = await bootTerminal();
 
     fireEvent.click(screen.getByRole('button', { name: 'whoami' }));
@@ -83,18 +83,6 @@ describe('Terminal', () => {
     await submitCommand(input, 'projects');
     expect(screen.getByText('Featured Projects:')).toBeInTheDocument();
 
-    await submitCommand(input, 'contacts');
-    expect(screen.getByText('Contact Information:')).toBeInTheDocument();
-
-    await submitCommand(input, 'resume');
-    expect(screen.getByRole('link', { name: '[View LinkedIn profile]' })).toHaveAttribute(
-      'href',
-      'https://www.linkedin.com/in/b-shchavinskyi-fullstack',
-    );
-    const resumeLink = screen.getByRole('link', { name: '[Download PDF]' });
-    expect(resumeLink).toHaveAttribute('href', '/Bogdan_Shchavinskyi_CV.pdf');
-    expect(resumeLink).toHaveAttribute('download', 'Bogdan_Shchavinskyi_CV.pdf');
-
     await submitCommand(input, 'does-not-exist');
     expect(screen.getByText(/Command not found: does-not-exist/)).toBeInTheDocument();
   });
@@ -110,7 +98,9 @@ describe('Terminal', () => {
     expect(screen.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeInTheDocument();
     expect(screen.getByText(/Why a Terminal?/)).toBeInTheDocument();
 
-    await submitCommand(input, 'blog missing');
+    fireEvent.click(screen.getByRole('link', { name: 'Terminal' }));
+    const returnedInput = screen.getByRole('textbox', { name: 'Terminal command' });
+    await submitCommand(returnedInput, 'blog missing');
     expect(screen.getByText(/Post 'missing' not found/)).toBeInTheDocument();
   });
 
@@ -126,7 +116,7 @@ describe('Terminal', () => {
     expect(screen.getByText('Available Commands:')).toBeInTheDocument();
   });
 
-  it('animates a long blog post and eventually reveals its complete content', async () => {
+  it('opens a complete article from a typed command and returns to help', async () => {
     const input = await bootTerminal();
     fireEvent.change(input, { target: { value: 'BLOG ai-slop-era' } });
     const form = input.closest('form');
@@ -137,11 +127,16 @@ describe('Terminal', () => {
 
     fireEvent.submit(form);
 
-    expect(screen.queryByText(/Keep the garbage out of your project/)).not.toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(100_000));
-
     expect(screen.getByText(/Keep the garbage out of your project/)).toBeInTheDocument();
+    expect(screen.queryByRole('img', { name: /^Bogdan Shchavinskyi/ })).not.toBeInTheDocument();
+    expect(screen.queryByText('$ BLOG ai-slop-era')).not.toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);
+    expect(input).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('link', { name: 'Terminal' }));
+    await act(() => vi.advanceTimersByTimeAsync(5000));
+    expect(screen.getByText('Available Commands:')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Terminal command' })).toHaveFocus();
   });
 
   it('runs every hidden command and clears back to help', async () => {

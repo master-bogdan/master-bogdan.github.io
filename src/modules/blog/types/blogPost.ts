@@ -3,6 +3,7 @@ export type BlogPost = {
   readonly title: string;
   readonly date: string;
   readonly content: string;
+  readonly previewImage?: string;
 };
 
 export type BlogPostSource = {

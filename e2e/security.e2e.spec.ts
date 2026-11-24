@@ -5,10 +5,20 @@ import { collectBrowserErrors } from './utils/collect-browser-errors';
 test('keeps the terminal usable under the production content security policy', async ({ page }) => {
   const errors = collectBrowserErrors(page);
 
-  for (const pathname of ['./', 'resume/', 'blog/welcome/', 'projects/local-ai-lab/']) {
+  for (const pathname of [
+    './',
+    'contacts/',
+    'resume/',
+    'blog/welcome/',
+    'projects/local-ai-lab/',
+  ]) {
     await page.goto(pathname);
     await expect(page.locator('html')).toHaveClass(/\bjs\b/);
-    await expect(page.getByRole('textbox', { name: 'Terminal command' })).toBeVisible();
+    if (pathname === 'blog/welcome/') {
+      await expect(page.locator('article')).toBeVisible();
+    } else {
+      await expect(page.getByRole('textbox', { name: 'Terminal command' })).toBeVisible();
+    }
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute(
       'content',
       /script-src 'self' 'sha256-/,

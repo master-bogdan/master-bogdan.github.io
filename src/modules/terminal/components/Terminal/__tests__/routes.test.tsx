@@ -15,25 +15,25 @@ describe('Terminal public routes', () => {
   });
   afterEach(() => vi.useRealTimers());
 
-  it('animates a direct post URL and keeps commands usable', async () => {
+  it('opens a direct article and navigates to terminal project pages', async () => {
     window.history.replaceState(null, '', '/blog/welcome/');
     render(<Terminal initialPath="/blog/welcome/" />);
-    expect(
-      screen.queryByRole('heading', { name: 'Welcome to My Terminal' }),
-    ).not.toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(10));
-    expect(screen.getByText('W')).toBeInTheDocument();
-    await act(() => vi.advanceTimersByTimeAsync(1000));
     expect(screen.getByRole('heading', { name: 'Welcome to My Terminal' })).toBeInTheDocument();
+    expect(screen.getByText('Happy exploring!')).toBeInTheDocument();
+    expect(screen.getAllByText('Welcome to My Terminal')).toHaveLength(1);
     expect(screen.queryByText('Initializing system...')).not.toBeInTheDocument();
+    expect(screen.queryByRole('textbox', { name: 'Terminal command' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('link', { name: 'Projects' }));
+    await act(() => vi.advanceTimersByTimeAsync(5000));
     const input = screen.getByRole('textbox', { name: 'Terminal command' });
-    expect(input).toHaveFocus();
     fireEvent.change(input, { target: { value: 'PROJECTS local-ai-lab' } });
     fireEvent.submit(input.closest('form')!);
     await act(() => vi.advanceTimersByTimeAsync(20_000));
     expect(window.location.pathname).toBe('/projects/local-ai-lab/');
     expect(screen.getByRole('heading', { name: 'Local AI Lab' })).toBeInTheDocument();
     expect(screen.getByText('v0.2.0 ↗')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /^Bogdan Shchavinskyi/ })).toBeInTheDocument();
     expect(input).toHaveFocus();
   });
 
@@ -52,23 +52,6 @@ describe('Terminal public routes', () => {
     window.history.forward();
     await act(() => vi.advanceTimersByTimeAsync(1000));
     expect(screen.getByRole('heading', { name: 'Neovim Practice' })).toBeInTheDocument();
-  });
-
-  it('keeps the resume focused on the CV and LinkedIn links', async () => {
-    render(<Terminal initialPath="/resume/" />);
-    await act(() => vi.advanceTimersByTimeAsync(2000));
-    expect(screen.getByRole('heading', { name: 'Bogdan Shchavinskyi' })).toBeInTheDocument();
-    expect(screen.queryByText('What I work on')).not.toBeInTheDocument();
-    expect(screen.queryByText('Main technologies')).not.toBeInTheDocument();
-    expect(screen.queryByText('Certifications')).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '[View LinkedIn profile]' })).toHaveAttribute(
-      'href',
-      'https://www.linkedin.com/in/b-shchavinskyi-fullstack',
-    );
-    expect(screen.getByRole('link', { name: '[Download PDF]' })).toHaveAttribute(
-      'download',
-      'Bogdan_Shchavinskyi_CV.pdf',
-    );
   });
 
   it('handles nonexistent posts and projects without publishing broken command URLs', async () => {

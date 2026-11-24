@@ -2,7 +2,7 @@ import { ThemeColors } from '@/shared';
 
 const terminalText = {
   fontFamily: 'var(--font-mono)',
-  fontSize: '14px',
+  fontSize: 'var(--terminal-font-size, 16px)',
 } as const;
 
 export const commandStyles = {
@@ -33,12 +33,13 @@ export const commandStyles = {
   },
   commandRow: {
     display: 'flex',
-    mb: 0.5,
+    gap: 1,
+    mb: 1,
   },
   commandName: {
     ...terminalText,
     color: ThemeColors.GREEN,
-    minWidth: '120px',
+    minWidth: '10ch',
   },
   commandDescription: {
     ...terminalText,
@@ -52,7 +53,7 @@ export const commandStyles = {
   hiddenCommandName: {
     ...terminalText,
     color: '#ff00ff',
-    minWidth: '120px',
+    minWidth: '10ch',
   },
   helpFooter: {
     ...terminalText,

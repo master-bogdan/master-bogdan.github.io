@@ -50,7 +50,11 @@ const renderPage = ({ metadata, html }) => {
     'property="og:description"': metadata.description,
     'property="og:url"': metadata.canonical,
     'property="og:type"': metadata.ogType,
+    'property="og:image"': metadata.image,
+    'property="og:image:alt"': metadata.imageAlt,
     'name="twitter:title"': metadata.title,
+    'name="twitter:image"': metadata.image,
+    'name="twitter:image:alt"': metadata.imageAlt,
     'name="twitter:description"': metadata.description,
   };
   for (const [attribute, content] of Object.entries(contentByAttribute)) {
@@ -89,7 +93,8 @@ try {
     await mkdir(directory, { recursive: true });
     await writeFile(path.join(directory, 'index.html'), renderPage(page));
   }
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(({ metadata }) => `<url><loc>${escapeHtml(metadata.canonical)}</loc></url>`).join('')}</urlset>\n`;
+  const canonicalUrls = [...new Set(pages.map(({ metadata }) => metadata.canonical))];
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${canonicalUrls.map((url) => `<url><loc>${escapeHtml(url)}</loc></url>`).join('')}</urlset>\n`;
   await writeFile(path.join(buildDirectory, 'sitemap.xml'), sitemap);
   log(`Generated ${pages.length} directly reachable portfolio pages and sitemap.xml`);
 } finally {

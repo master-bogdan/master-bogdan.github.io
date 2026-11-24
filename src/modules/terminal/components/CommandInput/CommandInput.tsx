@@ -15,9 +15,14 @@ import { commandInputStyles } from './styles';
 type CommandInputProps = {
   readonly onCommand: (command: string) => void;
   readonly disabled?: boolean;
+  readonly outputId?: number;
 };
 
-export function CommandInput({ onCommand, disabled = false }: CommandInputProps): ReactElement {
+export function CommandInput({
+  onCommand,
+  disabled = false,
+  outputId,
+}: CommandInputProps): ReactElement {
   const [input, setInput] = useState('');
   const [isCursorVisible, setIsCursorVisible] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +31,7 @@ export function CommandInput({ onCommand, disabled = false }: CommandInputProps)
     if (!disabled) {
       inputRef.current?.focus();
     }
-  }, [disabled]);
+  }, [disabled, outputId]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
